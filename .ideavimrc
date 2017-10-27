@@ -1,0 +1,106 @@
+set surround
+imap fd <esc>
+surround <CR> <CR>\r<CR>
+inoremap <A-h> <C-o>h
+nnoremap <C-J> m`o<Esc>``
+nnoremap <C-K> m`O<Esc>``
+:set noexpandtab
+:set copyindent
+:set preserveindent
+:set softtabstop=0
+:set shiftwidth=4
+:set tabstop=4
+inoremap <A-l> <C-o>l
+set ignorecase
+set smartcase
+set incsearch
+xnoremap p pgvy
+nnoremap <C-p> <C-o>
+nnoremap <C-p> <C-o>
+nnoremap <A-d> <C-d>
+nnoremap <A-u> <C-u>
+nnoremap ' `
+nnoremap ` '
+vnorem // y/<c-r>"<cr>
+map ,m :action ExtractMethod<CR>
+map ,e :action ShowErrorDescription<CR>
+map ,o :action FileStructurePopup<CR>
+map ,tr :action RunClass<CR>
+map ,td :action DebugClass<CR>
+map ,tf :action RerunFailedTests<CR>
+map ,se :action ActivateEventLogToolWindow<CR>
+map ,sd :action ChooseDebugConfiguration<CR>
+map ,sr :action ChooseRunConfiguration<CR>
+map ,sb :action ViewBreakpoints<CR>
+nmap ,v :action IntroduceVariable<CR>
+map ,h :action HideAllWindows<CR>
+map ,tt :action Rerun<CR>
+map ,tf :action RerunFailedTests<CR>
+map ,r :action RenameElement<CR>
+map ,gl :action Compare.LastVersion<CR>
+map ,b :action ToggleLineBreakpoint<CR>
+map ,l :action JumpToLastWindow<CR>
+map ,gh :action Compare.Selected<CR>
+map ,M :action Move<CR>
+map ,c :action Compile<CR>
+map ,sj :action synchronizeProject<CR>
+map ,j ,c,sj
+map ,i :action Inline<CR>
+map ,st :action SurroundWith<CR>
+map ,abd ea()<Esc>hxbiBigDecimal.valueOf(<Esc><Esc>
+map ,abi ea()<Esc>hxbiBigInteger.valueOf(<Esc><Esc>
+map ,wv :action SplitVertically<CR>
+map ,wu :action Unsplit<CR>
+map ,su :action ShowUsages<CR>
+map ,sf :action FileStructurePopup<CR>
+map ,ff :action ReformatCode<CR>
+map ,fu :action FindUsages<CR>
+map <C-I> :action Forward<CR>
+map <C-O> :action Back<CR>
+map ,u :action Unwrap<CR>
+map g; :action JumpToLastChange<CR>
+map g, :action JumpToNextChange<CR>
+
+nnoremap <tab> %
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+nnoremap gx vato
+nnoremap dsB yiBvaBVp<C-S-f>
+
+vnorem // y/<c-r>"<cr>
+
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+nnoremap <C-q> <C-v>
+" nnoremap ,w <C-w>v<C-w>h:q<CR><C-w>l
+"  nnoremap ,s <C-w>s<C-w>k:q<CR><C-w>j
+" nnoremap ,H <C-w>H
+"  nnoremap ,J <C-w>J
+" nnoremap ,K <C-w>K
+"  nnoremap ,L <C-w>L
+" nnoremap ,h <C-w>h
+"  nnoremap ,j <C-w>j
+" nnoremap ,k <C-w>k
+"  nnoremap ,l <C-w>l
+" nnoremap ,W <C-w>
+nnoremap vir /;<CR>hv?=<CR>w
+" nnoremap yir /;<CR>mz?=<CR>wy`z
