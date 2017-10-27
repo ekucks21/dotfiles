@@ -230,9 +230,7 @@ layers configuration. You are free to put any user code."
   ;;              '("\\." "\\`root\\'" "/ssh:%h:"))
   (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
   (setq projectile-switch-project-action 'projectile-vc)
-  (setenv "TARBALL_HOME" "~/sb/jpes/jfw")
   (setenv "JAVA_HOME" "/usr/lib/jvm/java-8-oracle")
-  (setenv "JFW_CLIENTS_HOME" "~/sb/jpes/jfw-clients")
   (set-default 'eshell-visual-commands '("gradle", "watch"))
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
   ;; (with-eval-after-load 'gnus
@@ -287,15 +285,7 @@ layers configuration. You are free to put any user code."
  '(magit-cherry-pick-arguments (quote ("-x")))
  '(magit-pull-arguments (quote ("--rebase")))
  '(org-startup-truncated nil)
- '(paradox-automatically-star t)
- '(sql-connection-alist
-   (quote
-    (("kuckse.newark.jfw"
-      (sql-product
-       (quote postgres))
-      (sql-user "jfwdba")
-      (sql-database "jfw")
-      (sql-server "kuckse.newark.jfw"))))))
+ '(paradox-automatically-star t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
