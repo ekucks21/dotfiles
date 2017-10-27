@@ -1,0 +1,16 @@
+partial modifier_keys
+
+xkb_symbols "caps_mod" {
+    key <CAPS> { [ Overlay1_Enable ] };
+    key <AC06> { [ h, H ], overlay1=<LEFT> };
+    key <AC07> { [ j, J ], overlay1=<DOWN> };
+    key <AC08> { [ k, K ], overlay1=<UP> };
+    key <AC09> { [ l, L ], overlay1=<RGHT> };
+    key <AE04> { [ 4, dollar ], overlay1=<END> };
+    key <AE06> { [ 6, asciicircum ], overlay1=<HOME> };
+    key <AD03> { [ e, E ], overlay1=<ESC> };
+    key <AB02> { [ x, X ], overlay1=<DELE> };
+    key <AC04> { [ f, F ], overlay1=<PGDN> };
+    key <AB05> { [ b, B ], overlay1=<PGUP> };
+    key <AD08> { [ i, I ], overlay1=<INS> };
+};

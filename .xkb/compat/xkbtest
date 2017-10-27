@@ -1,0 +1,5 @@
+xkb_compatibility "overlay_no_lock" {
+    interpret Overlay1_Enable+AnyOfOrNone(all) {
+        action= SetControls(controls=Overlay1);
+    };
+};

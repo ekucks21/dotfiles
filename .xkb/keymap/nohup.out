@@ -1,0 +1,95 @@
+
+(process:11822): GLib-CRITICAL **: g_slice_set_config: assertion 'sys_page_size == 0' failed
+*************************
+A coding exception was thrown and uncaught in a Task.
+
+Full message: TypeError: this.Paths is null
+Full stack: Agent.write@resource:///modules/sessionstore/SessionWorker.js:196:9
+worker.dispatch@resource:///modules/sessionstore/SessionWorker.js:21:24
+anonymous/AbstractWorker.prototype.handleMessage@resource://gre/modules/workers/PromiseWorker.js:122:16
+@resource:///modules/sessionstore/SessionWorker.js:30:41
+
+*************************
+console.error: 
+  Could not write session state file 
+  Message: TypeError: this.Paths is null
+  Stack:
+    Agent.write@resource:///modules/sessionstore/SessionWorker.js:196:9
+worker.dispatch@resource:///modules/sessionstore/SessionWorker.js:21:24
+anonymous/AbstractWorker.prototype.handleMessage@resource://gre/modules/workers/PromiseWorker.js:122:16
+@resource:///modules/sessionstore/SessionWorker.js:30:41
+
+  Agent.write@resource:///modules/sessionstore/SessionWorker.js:196:9
+worker.dispatch@resource:///modules/sessionstore/SessionWorker.js:21:24
+anonymous/AbstractWorker.prototype.handleMessage@resource://gre/modules/workers/PromiseWorker.js:122:16
+@resource:///modules/sessionstore/SessionWorker.js:30:41
+
+1446169369773	addons.update-checker	WARN	Update manifest for {972ce4c6-7e08-4474-a285-3208198ce6fd} did not contain an updates property
+1446169369896	addons.update-checker	WARN	Update manifest for ubufox@ubuntu.com did not contain an updates property
+2015-10-29 23:12:07,619 - softwarecenter.ui.gtk3.app - INFO - setting up proxy 'None'
+2015-10-29 23:12:09,237 - softwarecenter.region - WARNING - failed to use geoclue: 'org.freedesktop.Geoclue.Error.notAvailable: Geoclue master client has no usable Address providers'
+2015-10-29 23:12:09,559 - softwarecenter.backend.reviews - WARNING - Could not get usefulness from server, no username in config file
+2015-10-29 23:12:09,576 - softwarecenter.plugin - INFO - activating plugin '<module 'webapps_activation' from '/usr/share/software-center/softwarecenter/plugins/webapps_activation.pyc'>'
+2015-10-29 23:12:10,133 - softwarecenter.db.pkginfo_impl.aptcache - INFO - aptcache.open()
+2015-10-29 23:12:10,714 - softwarecenter.backend.reviews - WARNING - error creating bsddb: '(22, 'Invalid argument -- BDB0054 illegal flag combination specified to DB_ENV->open')' (corrupted?)
+2015-10-29 23:12:10,714 - softwarecenter.backend.reviews - ERROR - trying to repair DB failed
+Traceback (most recent call last):
+  File "/usr/share/software-center/softwarecenter/backend/reviews/__init__.py", line 358, in _save_review_stats_cache_blocking
+    self._dump_bsddbm_for_unity(outfile, outdir)
+  File "/usr/share/software-center/softwarecenter/backend/reviews/__init__.py", line 377, in _dump_bsddbm_for_unity
+    0600)
+DBInvalidArgError: (22, 'Invalid argument -- BDB0054 illegal flag combination specified to DB_ENV->open')
+/usr/lib/python2.7/dist-packages/gi/overrides/GLib.py:535: Warning: Source ID 75 was not found when attempting to remove it
+  return super(MainContext, self).iteration(may_block)
+2015-10-29 23:12:16,085 - softwarecenter.ui.gtk3.views.lobbyview - WARNING - skipping exhibit for: 'u'leadwerks\r\nleadwerks-indie'' not available
+/usr/bin/software-center:184: Warning: Source ID 125 was not found when attempting to remove it
+  Gtk.main()
+/usr/lib/python2.7/dist-packages/gi/overrides/GLib.py:535: Warning: Source ID 20 was not found when attempting to remove it
+  return super(MainContext, self).iteration(may_block)
+2015-10-29 23:12:19,230 - softwarecenter.db.utils - INFO - software-center-agent finished with status 0
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 157 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 825 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 1744 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 2645 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 3566 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 4509 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 5450 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 6370 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 7247 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 8128 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 8997 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 9846 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 10763 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 11681 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 12612 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 13485 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 14406 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 15329 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 16196 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 17119 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 17848 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 18743 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
+/usr/share/software-center/softwarecenter/ui/gtk3/widgets/exhibits.py:404: Warning: Source ID 19620 was not found when attempting to remove it
+  GLib.source_remove(self._timeout)
