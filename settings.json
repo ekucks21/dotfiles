@@ -1,0 +1,36 @@
+{
+   "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "scrollkey.line1": 1,
+    "scrollkey.line2": 30,
+    "scrollkey.line3": 60,
+    "vim.hlsearch": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["j","j"],
+            "after": ["<Esc>"]
+        }
+    ],
+    "vim.otherModesKeyBindingsNonRecursive": [
+        {
+            "before": ["<leader>","d"],
+            "after": ["d", "d"]
+        },
+        {
+            "before":["<C-n>"],
+            "after":[],
+            "commands": [
+                {
+                    "command": ":nohl"
+                }
+            ]
+        }
+    ],
+    "vim.leader": ",",
+    "vim.handleKeys":{
+        "<C-a>": false,
+        "<C-f>": false
+    }
+}
