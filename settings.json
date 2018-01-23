@@ -1,5 +1,7 @@
 {
-   "vim.easymotion": true,
+    "git.path": "C:\\cygwin64\\usr\\bin\\git.exe",
+    "workbench.colorTheme": "Quiet Light",
+    "vim.easymotion": true,
     "vim.incsearch": true,
     "vim.useSystemClipboard": true,
     "vim.useCtrlKeys": true,
@@ -9,7 +11,7 @@
     "vim.hlsearch": true,
     "vim.insertModeKeyBindings": [
         {
-            "before": ["j","j"],
+            "before": ["f","d"],
             "after": ["<Esc>"]
         }
     ],
@@ -17,6 +19,91 @@
         {
             "before": ["<leader>","d"],
             "after": ["d", "d"]
+        },
+        {
+            "before": ["g", "D"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "editor.action.goToTypeDefinition",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": ["<leader>", "r"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "editor.action.rename",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": ["<leader>", "f", "r"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "editor.action.referenceSearch.trigger",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": ["g", "p"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "editor.action.previewDeclaration"
+                }
+            ]
+        },
+        {
+            "before": ["<leader>", "e"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "editor.action.marker.next",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": ["<C-S-]>"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "editor.action.goToImplementation"
+                }
+            ]
+        },
+        {
+            "before": ["<C-]>"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "editor.action.goToDeclaration"
+                }
+            ]
+        },
+        {
+            "before": ["<C-i>"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "workbench.action.navigateForward"
+                }
+            ]
+        },
+        {
+            "before": ["<C-o>"],
+            "after": [],
+            "commands": [
+                {
+                    "command": "workbench.action.navigateBack"
+                }
+            ]
         },
         {
             "before":["<C-n>"],
@@ -28,9 +115,11 @@
             ]
         }
     ],
-    "vim.leader": ",",
+    "vim.leader": "<space>",
     "vim.handleKeys":{
         "<C-a>": false,
         "<C-f>": false
-    }
+    },
+    "files.autoSave": "afterDelay",
+    "window.zoomLevel": -1
 }
