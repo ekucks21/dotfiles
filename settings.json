@@ -121,5 +121,6 @@
         "<C-f>": false
     },
     "files.autoSave": "afterDelay",
-    "window.zoomLevel": -1
+    "window.zoomLevel": -1,
+    "vim.disableExtension": false
 }
