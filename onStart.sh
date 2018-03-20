@@ -14,4 +14,4 @@ fi
 
 xkbcomp -I$HOME/.xkb ~/.xkb/keymap/xkbtest $DISPLAY
 s2cctl stop
-# s2cctl start
+s2cctl start
