@@ -41,6 +41,7 @@ map ,gl :action Compare.LastVersion<CR>
 map ,b :action ToggleLineBreakpoint<CR>
 map ,l :action JumpToLastWindow<CR>
 map ,gh :action Compare.Selected<CR>
+map ,gs :action Vcs.ShowHistoryForBlock<CR>
 map ,M :action Move<CR>
 map ,c :action Compile<CR>
 map ,sj :action synchronizeProject<CR>
