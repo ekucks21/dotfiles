@@ -250,6 +250,7 @@ layers configuration. You are free to put any user code."
   (add-hook 'clojure-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'cider-repl-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'clojurescript-mode-hook (lambda () (lispy-mode 1)))
+  (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
   (global-linum-mode nil)
   ;; (linum-relative-toggle)
   (setq org-export-with-sub-superscripts nil)
