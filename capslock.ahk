@@ -82,6 +82,7 @@ Capslock & f up::SendInput {Blind}{PgDn Up}
 
 Capslock & w::SendInput {Alt down}{F4}{Alt up}
 Capslock & e::SendInput {Blind}{Esc Down}
+Capslock & e up::SendInput {Blind}{Esc Up}
 
 
 ; Capslock + nm (insert, backspace, del)
