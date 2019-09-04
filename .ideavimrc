@@ -38,6 +38,7 @@ map ,tt :action Rerun<CR>
 map ,tf :action RerunFailedTests<CR>
 map ,r :action RenameElement<CR>
 map ,gl :action Compare.LastVersion<CR>
+map ,ga :action Annotate<CR>
 map ,b :action ToggleLineBreakpoint<CR>
 map ,l :action JumpToLastWindow<CR>
 map ,gh :action Compare.Selected<CR>
@@ -61,6 +62,7 @@ map <C-O> :action Back<CR>
 map ,u :action Unwrap<CR>
 map g; :action JumpToLastChange<CR>
 map g, :action JumpToNextChange<CR>
+map ,crt :action :cursive.testing.actions/run-single-test
 
 nnoremap <tab> %
 vnoremap <silent> * :<C-U>
