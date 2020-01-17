@@ -14,6 +14,6 @@ if [ ! -d ~/sb/Space2Ctrl ]; then
 fi
 
 xkbcomp -I$HOME/.xkb ~/.xkb/keymap/xkbtest $DISPLAY
-s2cctl stop
-pkill -f -9 s2c
-s2cctl start
+# s2cctl stop
+# pkill -f -9 s2c
+# s2cctl start

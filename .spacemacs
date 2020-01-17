@@ -52,7 +52,7 @@ values."
      ;; markdown
      org
      (shell :variables
-            shell-default-shell 'shell
+            shell-default-shell 'ansi-term
             shell-default-height 30
             shell-default-position 'bottom)
      ;; spell-checking
@@ -242,6 +242,7 @@ layers configuration. You are free to put any user code."
   (setq projectile-switch-project-action 'projectile-vc)
   (setenv "JAVA_HOME" "/usr/lib/jvm/java-8-oracle")
   (set-default 'eshell-visual-commands '("gradle", "watch"))
+  (require 'org-tempo)
   (setq comint-scroll-to-bottom-on-output "others")
   (setq term-scroll-to-bottom-on-output "others")
   (require 'org-tempo)
