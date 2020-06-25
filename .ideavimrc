@@ -53,10 +53,23 @@ map ,abd ea()<Esc>hxbiBigDecimal.valueOf(<Esc><Esc>
 map ,abi ea()<Esc>hxbiBigInteger.valueOf(<Esc><Esc>
 map ,wv :action SplitVertically<CR>
 map ,wu :action Unsplit<CR>
+map ,wm :action MoveEditorToOppositeTabGroup<CR>
 map ,su :action ShowUsages<CR>
 map ,sf :action FileStructurePopup<CR>
 map ,ff :action ReformatCode<CR>
 map ,fu :action FindUsages<CR>
+map [ :action :cursive.actions.paredit/backward-up<CR>
+map ] :action :cursive.actions.paredit/forward-up<CR>
+map ,cf :action :cursive.actions.paredit/thread-form<CR>
+map ,cu :action :cursive.actions.paredit/unthread-form<CR>
+map ,cd :action :cursive.actions.paredit/move-form-down<CR>
+map ,cb :action :cursive.actions.paredit/move-form-up<CR>
+map ,co :action :cursive.repl.actions/jump-to-output<CR>
+map ,ca :action :cursive.testing.actions/run-ns-tests<CR>
+map ,ct :action :cursive.testing.actions/run-single-test<CR>
+map ,cl :action :cursive.testing.actions/rerun-last-test<CR>
+map ,n :action NextSplitter<CR>
+map ,p :action PreviousSplitter<CR>
 map <C-I> :action Forward<CR>
 map <C-O> :action Back<CR>
 map ,u :action Unwrap<CR>
