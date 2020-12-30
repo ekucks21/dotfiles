@@ -54,11 +54,11 @@ values."
      ;; markdown
      org
      (shell :variables
-            shell-default-shell 'ansi-term
+            shell-default-shell 'vterm
             shell-default-height 30
             shell-default-position 'bottom)
      ;; spell-checking
-     ;; syntax-checking
+     syntax-checking
      sql
      version-control
      )
@@ -267,9 +267,13 @@ layers configuration. You are free to put any user code."
   (add-hook 'clojurescript-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
   (global-linum-mode nil)
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "i") 'evil-emacs-state)
+  (evil-set-initial-state 'vterm-mode 'emacs)
   ;; (linum-relative-toggle)
   (setq org-export-with-sub-superscripts nil)
   (setq-default evil-escape-delay 0.3)
+  (spaceline-toggle-hud-off)
   (setq eshell-buffer-shorthand nil)
   (setenv "PATH" (concat (getenv "PATH") ":/usr/lib/oracle/12.2/client64/bin"))
   (setenv "USER_DB_PW" "Hjx[>q4l\;wb,D6}Q(>)4")
@@ -278,11 +282,13 @@ layers configuration. You are free to put any user code."
   (setenv "USER_DB_NAME" "faa-aov")
   (setq exec-path (append exec-path '("/usr/lib/oracle/12.2/client64/bin")))
   (setq evil-ex-visual-char-range t)
+  (setq-default evil-escape-excluded-major-modes '(vterm-mode))
 
   (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
   (define-key evil-motion-state-map (kbd "s") 'avy-goto-char-2)
   (add-hook 'text-mode-hook #'visual-line-mode)
   (setq dotspacemacs-distinguish-gui-tab t)
+  ;; (add-to-list 'evil-escape-excluded-major-modes 'vterm-mode)
   (setq password-cache t)
   (setq confluence-url "https://web1.pragmatics.com/jfwwiki/rpc/xmlrpc")
   (require 'ox-confluence)
