@@ -1,6 +1,7 @@
 ;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
+(require 'cl-lib)
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
@@ -11,6 +12,22 @@ values."
    ;; `+distribution'. For now available distributions are `spacemacs-base'
    ;; or `spacemacs'. (default 'spacemacs)
    dotspacemacs-distribution 'spacemacs
+
+   ;; Lazy installation of layers (i.e. layers are installed only when a file
+   ;; with a supported type is opened). Possible values are `all', `unused'
+   ;; and `nil'. `unused' will lazy install only unused layers (i.e. layers
+   ;; not listed in variable `dotspacemacs-configuration-layers'), `all' will
+   ;; lazy install any layer that support lazy installation even the layers
+   ;; listed in `dotspacemacs-configuration-layers'. `nil' disable the lazy
+   ;; installation feature and you have to explicitly list a layer in the
+   ;; variable `dotspacemacs-configuration-layers' to install it.
+   ;; (default 'unused)
+   dotspacemacs-enable-lazy-installation 'unused
+
+   ;; If non-nil then Spacemacs will ask for confirmation before installing
+   ;; a layer lazily. (default t)
+   dotspacemacs-ask-for-lazy-installation t
+
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    ;; dotspacemacs-configuration-layer-path '("~/.mycontribs/")
@@ -24,12 +41,19 @@ values."
      syntax-checking
      go
      javascript
+     slack
      terraform
      rust
      typescript
      python
+     (conda :variables
+            conda-anaconda-home "~/anaconda3/"
+            conda-env-home-directory "~/anaconda3/"
+            conda-env-autoactivate-mode t)
+     conda
      csv
      ansible
+     dap
      vimscript
      html
      haskell
@@ -46,8 +70,52 @@ values."
      terraform
      (clojure :variables
               clojure-enable-clj-refactor t
-              clojure-enable-linters 'clj-kondo)
+              ;; clojure-enable-linters 'clj-kondo
+              )
+     (lsp :variables
+          ;; Formatting and indentation - use Cider instead
+          lsp-enable-on-type-formatting t
+          ;; Set to nil to use CIDER features instead of LSP UI
+          lsp-enable-indentation t
+          lsp-enable-snippet t ;; to test again
+
+          ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
+          ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
+          lsp-enable-symbol-highlighting t
+
+          ;; Show lint error indicator in the mode line
+          lsp-modeline-diagnostics-enable t
+          ;; lsp-modeline-diagnostics-scope :workspace
+
+          lsp-remap-xref-keybindings t
+
+          ;; popup documentation boxes
+          ;; lsp-ui-doc-enable nil          ;; disable all doc popups
+          lsp-ui-doc-show-with-cursor nil ;; doc popup for cursor
+          lsp-ui-doc-show-with-mouse nil  ;; doc popup for mouse
+          ;; lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
+          lsp-ui-doc-include-signature t ;; include function signature
+          ;; lsp-ui-doc-position 'at-point  ;; top bottom at-point
+          lsp-ui-doc-alignment 'window ;; frame window
+
+          ;; code actions and diagnostics text as right-hand side of buffer
+          lsp-ui-sideline-enable nil
+          lsp-ui-sideline-show-code-actions nil
+          ;; lsp-ui-sideline-delay 500
+
+          ;; lsp-ui-sideline-show-diagnostics nil
+
+          ;; reference count for functions (assume their maybe other lenses in future)
+          lsp-lens-enable t
+
+          ;; Efficient use of space in treemacs-lsp display
+          treemacs-space-between-root-nodes nil
+
+          ;; Optimization for large files
+          lsp-file-watch-threshold 10000
+          lsp-log-io nil)
      gnus
+     (colors :variables colors-colorize-identifiers 'variables)
      docker
      git
      yaml
@@ -68,7 +136,9 @@ values."
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(
                                       org-plus-contrib
+                                      envrc
                                       lispy
+                                      (setenv-file :location (recipe :fetcher github :repo "cfclrk/setenv-file"))
                                       confluence
                                       table
                                       inf-mongo
@@ -82,7 +152,16 @@ values."
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
-   dotspacemacs-delete-orphan-packages t))
+   dotspacemacs-delete-orphan-packages t
+
+   ;; Defines the behaviour of Spacemacs when installing packages.
+   ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
+   ;; `used-only' installs only explicitly used packages and deletes any unused
+   ;; packages as well as their unused dependencies. `used-but-keep-unused'
+   ;; installs only the used packages but won't delete unused ones. `all'
+   ;; installs *all* packages supported by Spacemacs and never uninstalls them.
+   ;; (default is `used-only')
+   dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()
   "Initialization function.
@@ -93,6 +172,7 @@ values."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
+   dotspacemacs-line-numbers t
    ;; One of `vim', `emacs' or `hybrid'. Evil is always enabled but if the
    ;; variable is `emacs' then the `holy-mode' is enabled at startup. `hybrid'
    ;; uses emacs key bindings for vim's insert mode, but otherwise leaves evil
@@ -110,7 +190,7 @@ values."
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists '(recents projects)
+   dotspacemacs-startup-lists nil
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
@@ -243,9 +323,19 @@ layers configuration. You are free to put any user code."
   ;;              '("\\." "\\`root\\'" "/ssh:%h:"))
   (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
   (setq projectile-switch-project-action 'projectile-vc)
+  ;; (define-key lsp-mode-map (kbd "M-m l") lsp-command-map)
+  ;; (spacemacs/declare-prefix-for-mode 'lsp-mode "lr" 'lsp-find-references)
+  ;; (evil-define-key 'normal lsp-mode-map (kbd ", l") lsp-command-map)
+  ;; (spacemacs/set-leader-keys-for-major-mode 'lsp-mode "l" 'lsp-command-map)
+  ;; (spacemacs/set-leader-keys-for-major-mode 'lsp-mode "lr" 'lsp-find-references)
+  (spacemacs/set-leader-keys "pA" 'helm-projectile-find-file-in-known-projects)
+  (load "~/.emacs.d/.cache/quelpa/build/setenv-file/setenv-file.el")
+  (setq setenv-file-dir (expand-file-name "~/creds/"))
   (setenv "JAVA_HOME" "/usr/lib/jvm/java-8-oracle")
+  (setenv "PYTHON_EXECTUABLE" "~/anaconda3/envs/ribt/bin/python")
   (set-default 'eshell-visual-commands '("gradle", "watch"))
   (require 'org-tempo)
+  (envrc-global-mode)
   (setq comint-scroll-to-bottom-on-output "others")
   (setq term-scroll-to-bottom-on-output "others")
   (require 'org-tempo)
@@ -265,8 +355,10 @@ layers configuration. You are free to put any user code."
   (add-hook 'inf-clojure-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'cider-repl-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'clojurescript-mode-hook (lambda () (lispy-mode 1)))
-  (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
-  (global-linum-mode nil)
+  ;; (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
+  (setq browse-url-browser-function 'browse-url-firefox)
+  (setq vterm-max-scrollback 100000)
+  ;; (global-linum-mode nil)
   (evil-define-key 'normal vterm-mode-map
     (kbd "i") 'evil-emacs-state)
   (evil-set-initial-state 'vterm-mode 'emacs)
@@ -276,10 +368,6 @@ layers configuration. You are free to put any user code."
   (spaceline-toggle-hud-off)
   (setq eshell-buffer-shorthand nil)
   (setenv "PATH" (concat (getenv "PATH") ":/usr/lib/oracle/12.2/client64/bin"))
-  (setenv "USER_DB_PW" "Hjx[>q4l\;wb,D6}Q(>)4")
-  (setenv "USER_DB_USERNAME" "application_user@faa-aov-userdb.postgres.database.azure.com")
-  (setenv "USER_DB_HOST" "faa-aov-userdb.postgres.database.azure.com")
-  (setenv "USER_DB_NAME" "faa-aov")
   (setq exec-path (append exec-path '("/usr/lib/oracle/12.2/client64/bin")))
   (setq evil-ex-visual-char-range t)
   (setq-default evil-escape-excluded-major-modes '(vterm-mode))
@@ -376,7 +464,7 @@ This function is called at the very end of Spacemacs initialization."
  '(company-tooltip-common-selection
    ((t
      (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(compilation-message-face (quote default))
+ '(compilation-message-face 'default)
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#839496")
  '(cua-overwrite-cursor-color "#b58900")
@@ -385,60 +473,51 @@ This function is called at the very end of Spacemacs initialization."
  '(evil-want-Y-yank-to-eol t)
  '(fci-rule-color "#073642")
  '(grep-find-ignored-directories
-   (quote
-    ("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "target" "out")))
+   '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "target" "out"))
  '(helm-ag-command-option " -U")
  '(helm-ag-use-agignore t)
- '(helm-ag-use-grep-ignore-list t)
+ '(helm-ag-use-grep-ignore-list t t)
  '(helm-boring-file-regexp-list
-   (quote
-    ("\\.hi$" "\\.o$" "~$" "\\.bin$" "\\.lbin$" "\\.so$" "\\.a$" "\\.ln$" "\\.blg$" "\\.bbl$" "\\.elc$" "\\.lof$" "\\.glo$" "\\.idx$" "\\.lot$" "\\.svn/\\|\\.svn$" "\\.hg/\\|\\.hg$" "\\.git/\\|\\.git$" "\\.bzr/\\|\\.bzr$" "out/\\|out$" "target/\\|target$" "CVS/\\|CVS$" "_darcs/\\|_darcs$" "_MTN/\\|_MTN$" "\\.fmt$" "\\.tfm$" "\\.class$" "\\.fas$" "\\.lib$" "\\.mem$" "\\.x86f$" "\\.sparcf$" "\\.dfsl$" "\\.pfsl$" "\\.d64fsl$" "\\.p64fsl$" "\\.lx64fsl$" "\\.lx32fsl$" "\\.dx64fsl$" "\\.dx32fsl$" "\\.fx64fsl$" "\\.fx32fsl$" "\\.sx64fsl$" "\\.sx32fsl$" "\\.wx64fsl$" "\\.wx32fsl$" "\\.fasl$" "\\.ufsl$" "\\.fsl$" "\\.dxl$" "\\.lo$" "\\.la$" "\\.gmo$" "\\.mo$" "\\.toc$" "\\.aux$" "\\.cp$" "\\.fn$" "\\.ky$" "\\.pg$" "\\.tp$" "\\.vr$" "\\.cps$" "\\.fns$" "\\.kys$" "\\.pgs$" "\\.tps$" "\\.vrs$" "\\.pyc$" "\\.pyo$")))
- '(helm-completion-style (quote emacs))
- '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+   '("\\.hi$" "\\.o$" "~$" "\\.bin$" "\\.lbin$" "\\.so$" "\\.a$" "\\.ln$" "\\.blg$" "\\.bbl$" "\\.elc$" "\\.lof$" "\\.glo$" "\\.idx$" "\\.lot$" "\\.svn/\\|\\.svn$" "\\.hg/\\|\\.hg$" "\\.git/\\|\\.git$" "\\.bzr/\\|\\.bzr$" "out/\\|out$" "target/\\|target$" "CVS/\\|CVS$" "_darcs/\\|_darcs$" "_MTN/\\|_MTN$" "\\.fmt$" "\\.tfm$" "\\.class$" "\\.fas$" "\\.lib$" "\\.mem$" "\\.x86f$" "\\.sparcf$" "\\.dfsl$" "\\.pfsl$" "\\.d64fsl$" "\\.p64fsl$" "\\.lx64fsl$" "\\.lx32fsl$" "\\.dx64fsl$" "\\.dx32fsl$" "\\.fx64fsl$" "\\.fx32fsl$" "\\.sx64fsl$" "\\.sx32fsl$" "\\.wx64fsl$" "\\.wx32fsl$" "\\.fasl$" "\\.ufsl$" "\\.fsl$" "\\.dxl$" "\\.lo$" "\\.la$" "\\.gmo$" "\\.mo$" "\\.toc$" "\\.aux$" "\\.cp$" "\\.fn$" "\\.ky$" "\\.pg$" "\\.tp$" "\\.vr$" "\\.cps$" "\\.fns$" "\\.kys$" "\\.pgs$" "\\.tps$" "\\.vrs$" "\\.pyc$" "\\.pyo$"))
+ '(helm-completion-style 'emacs)
+ '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
-   (quote
-    ("#3b2b40b432a1" "#07ab45f64ce9" "#475733ea3554" "#1d623c04567f" "#2d5343d8332c" "#436f35f73166" "#0613413e597e")))
+   '("#3b2b40b432a1" "#07ab45f64ce9" "#475733ea3554" "#1d623c04567f" "#2d5343d8332c" "#436f35f73166" "#0613413e597e"))
  '(highlight-symbol-foreground-color "#93a1a1")
  '(highlight-tail-colors
-   (quote
-    (("#073642" . 0)
+   '(("#073642" . 0)
      ("#5b7300" . 20)
      ("#007d76" . 30)
      ("#0061a8" . 50)
      ("#866300" . 60)
      ("#992700" . 70)
      ("#a00559" . 85)
-     ("#073642" . 100))))
+     ("#073642" . 100)))
  '(hl-bg-colors
-   (quote
-    ("#866300" "#992700" "#a7020a" "#a00559" "#243e9b" "#0061a8" "#007d76" "#5b7300")))
+   '("#866300" "#992700" "#a7020a" "#a00559" "#243e9b" "#0061a8" "#007d76" "#5b7300"))
  '(hl-fg-colors
-   (quote
-    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
+   '("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36"))
  '(lsp-ui-doc-border "#93a1a1")
- '(magit-cherry-pick-arguments (quote ("-x")))
- '(magit-pull-arguments (quote ("--rebase")))
+ '(magit-cherry-pick-arguments '("-x"))
+ '(magit-pull-arguments '("--rebase"))
  '(nrepl-message-colors
-   (quote
-    ("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4")))
+   '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4"))
+ '(org-agenda-files '("~/MEGA/todo.org"))
  '(org-startup-truncated nil)
  '(package-selected-packages
-   (quote
-    (lsp-ui lsp-python-ms helm-lsp dap-mode lsp-treemacs bui company-lsp inf-mongo terraform-mode hcl-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode ahk-mode org-mime ghub let-alist sesman toml-mode tide typescript-mode racer pos-tip go-guru go-eldoc company-go go-mode cargo rust-mode robe bundler rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake minitest chruby inf-ruby nginx-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor js2-mode js-doc company-tern tern coffee-mode lispy zoutline swiper ivy powershell yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sqlplus sql-indent spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode psvn popwin plsql pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode jinja2-mode jdee memoize intero flycheck info+ indent-guide hy-mode dash-functional hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav edit-server edbi epc ctable concurrent deferred dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat diminish diff-hl define-word dactyl-mode cython-mode csv-mode confluence xml-rpc company-web web-completion-data company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-ansible company-anaconda company column-enforce-mode cmm-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider seq spinner queue pkg-info clojure-mode epl bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible anaconda-mode pythonic f dash s aggressive-indent adoc-mode markup-faces adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup)))
+   '(dap-mode bui inf-mongo terraform-mode hcl-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode ahk-mode org-mime ghub let-alist sesman toml-mode tide typescript-mode racer pos-tip go-guru go-eldoc company-go go-mode cargo rust-mode robe bundler rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake minitest chruby inf-ruby nginx-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor js2-mode js-doc company-tern tern coffee-mode lispy zoutline swiper ivy powershell yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sqlplus sql-indent spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode psvn popwin plsql pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode jinja2-mode jdee memoize intero flycheck info+ indent-guide hy-mode dash-functional hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav edit-server edbi epc ctable concurrent deferred dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat diminish diff-hl define-word dactyl-mode cython-mode csv-mode confluence xml-rpc company-web web-completion-data company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-ansible company-anaconda company column-enforce-mode cmm-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider seq spinner queue pkg-info clojure-mode epl bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible anaconda-mode pythonic f dash s aggressive-indent adoc-mode markup-faces adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup))
  '(paradox-automatically-star t)
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(safe-local-variable-values
-   (quote
-    ((cider-cljs-lein-repl . "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))"))))
+   '((cider-cljs-lein-repl . "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")))
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
  '(term-default-bg-color "#002b36")
  '(term-default-fg-color "#839496")
  '(vc-annotate-background nil)
  '(vc-annotate-background-mode nil)
  '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
+   '((20 . "#dc322f")
      (40 . "#ca7966832090")
      (60 . "#c05578c91534")
      (80 . "#b58900")
@@ -455,11 +534,10 @@ This function is called at the very end of Spacemacs initialization."
      (300 . "#3002984eaf4d")
      (320 . "#2f6f93e8bae0")
      (340 . "#2c598f79c66f")
-     (360 . "#268bd2"))))
+     (360 . "#268bd2")))
  '(vc-annotate-very-old-color nil)
  '(weechat-color-list
-   (quote
-    (unspecified "#002b36" "#073642" "#a7020a" "#dc322f" "#5b7300" "#859900" "#866300" "#b58900" "#0061a8" "#268bd2" "#a00559" "#d33682" "#007d76" "#2aa198" "#839496" "#657b83")))
+   '(unspecified "#002b36" "#073642" "#a7020a" "#dc322f" "#5b7300" "#859900" "#866300" "#b58900" "#0061a8" "#268bd2" "#a00559" "#d33682" "#007d76" "#2aa198" "#839496" "#657b83"))
  '(xterm-color-names
    ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
  '(xterm-color-names-bright

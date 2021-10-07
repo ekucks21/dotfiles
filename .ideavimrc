@@ -68,6 +68,10 @@ map ,co :action :cursive.repl.actions/jump-to-output<CR>
 map ,ca :action :cursive.testing.actions/run-ns-tests<CR>
 map ,ct :action :cursive.testing.actions/run-single-test<CR>
 map ,cl :action :cursive.testing.actions/rerun-last-test<CR>
+map ,ce :action :cursive.repl.actions/print-exception<CR>:action :cursive.repl.actions/jump-to-output<CR>
+map ,cs :action :cursive.repl.actions/search-history<CR>
+map ,cr :action Cursive.Repl.Command.refresh-repl<CR>
+map ,ci :action Cursive.Repl.Command.reset-integrant<CR>
 map ,n :action NextSplitter<CR>
 map ,p :action PreviousSplitter<CR>
 map <C-I> :action Forward<CR>
@@ -75,7 +79,6 @@ map <C-O> :action Back<CR>
 map ,u :action Unwrap<CR>
 map g; :action JumpToLastChange<CR>
 map g, :action JumpToNextChange<CR>
-map ,crt :action :cursive.testing.actions/run-single-test
 
 nnoremap <tab> %
 vnoremap <silent> * :<C-U>
