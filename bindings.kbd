@@ -27,8 +27,11 @@
   lctl lmet lalt           spc            ralt rmet cmp  rctl)
 
 (defalias
-    m_lay (tap-hold-next-release 200 v (layer-toggle movement))
-    u_lay (tap-hold-next-release 200 n (layer-toggle utilities))
+    f_lay (tap-hold-next-release 200 f (layer-toggle utilities))
+    j_lay (tap-hold-next-release 200 j (layer-toggle utilities))
+    c_lay (layer-toggle utilities)
+    sd_dn (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+    sd_up (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ +5%")
 
     met_a (tap-hold-next-release 200 a lmet)
     alt_s (tap-hold-next-release 200 s lalt)
@@ -44,23 +47,23 @@
 (deflayer homerowmods
       _      _      _      _      _      _      _      _      _      _      _      _      _      _
       _      _      _      _      _      _      _      _      _      _      _      _      _      _
-      _      @met_a @alt_s @ctl_d @sft_f g      h      @sft_j @ctl_k @alt_l @met_; _      _
-      _      _      _      _      @m_lay _      @u_lay _      _      _      _      _
-      _      _      _                    _                    _      _      _      _
-)
-
-(deflayer movement
-      _      _      _      _      _      _      _      _      _      _      _      _      _      _
-      _      _      _      _      _      _      _      pgdn   pgup   home   end      _      _      _
-      _      _      _      _      _      _      left   down   up     right  _      _      _
-      _      _      _      _      _      _      bspc   _      _      _      _      _
+      @c_lay _      _      _      _      _      _      _      _      _      _      _      _
+      _      _      _      _      _      _      _      _      _      _      _      _
       _      _      _                    _                    _      _      _      _
 )
 
 (deflayer utilities
       _      _      _      _      _      _      _      _      _      _      _      _      _      _
-      _      _      _      esc    _      _      _      _      _      _      _      _      _      _
-      _      {      }      \(     \)     \\     _      _      _      _      _      _      _
-      _      _      del    _      _      _      _      _      _      _      _      _
+      _      _      _      _      _      \\     _      pgdn   pgup   home   end      _      _      _
+      _      {      }      \(     \)     _      left   down   up     right  _      _      _
+      _      ins    del    _      @sd_dn @sd_up esc    _      _      ins    _      _
+      _      _      _                    _                    _      _      _      _
+)
+
+(deflayer utilities-old
+      _      _      _      _      _      _      _      _      _      _      _      _      _      _
+      _      _      _      esc    _      \\     _      _      _      _      _      _      _      _
+      _      {      }      \(     \)     _      _      _      _      _      _      _      _
+      _      _      del    ins    _      _      _      _      _      _      _      _
       _      _      _                    _                    _      _      _      _
 )
