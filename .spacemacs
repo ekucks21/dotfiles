@@ -338,7 +338,6 @@ layers configuration. You are free to put any user code."
   (setenv "JAVA_HOME" "/usr/lib/jvm/java-8-oracle")
   (setenv "PYTHON_EXECTUABLE" "~/anaconda3/envs/ribt/bin/python")
   (set-default 'eshell-visual-commands '("gradle", "watch"))
-  (add-hook 'projectile-mode-hook (lambda () (add-to-list 'projectile-globally-ignored-directories "cljs-out")))
   ;; (add-to-list 'helm-ag-ignore-patterns "cljs-out")
   (require 'org-tempo)
   (envrc-global-mode)
@@ -356,11 +355,19 @@ layers configuration. You are free to put any user code."
   (setq helm-ag-base-command "ag --nocolor --nogroup -S")
   (setq message-directory "~/owa")
 
+  ;; helm
+  (setq helm-ag-ignore-patterns '("cljs-out"))
+
   ;; cider
   (add-hook 'cider-mode-hook
             (lambda ()
               (cider-add-to-alist 'cider-jack-in-dependencies
                                   "clj-commons/pomegranate" "1.2.1")))
+
+  ;; projectile
+  (add-hook 'projectile-mode-hook
+            (lambda ()
+              (add-to-list 'projectile-globally-ignored-directories "cljs-out")))
 
   ;; lispy
   (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
@@ -378,6 +385,7 @@ layers configuration. You are free to put any user code."
                                ("n" lsp-rename "move to let")
                                ("f" cljr-inline-symbol "inline symbol"))
                              (define-key lispy-mode-map (kbd "M-n") 'lispy-mark-symbol)
+                             (lispy-define-key lispy-mode-map-special "/" 'lispy-splice)
                              (define-key lispy-mode-map (kbd "M-.")
                                (lambda ()
                                  (interactive)
