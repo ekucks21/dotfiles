@@ -379,7 +379,16 @@ layers configuration. You are free to put any user code."
   (add-hook 'lispy-mode-hook (lambda ()
                                (add-to-list 'lispy-compat 'cider)
                                (evil-define-key 'insert lispy-mode-map (kbd "/")
-                                 'special-lispy-splice)))
+                                 'special-lispy-splice)
+                               (evil-define-key 'insert lispy-mode-map (kbd "C-k")
+                                 'lispy-kill)
+                               (evil-define-key 'insert lispy-mode-map (kbd "C-d")
+                                 'lispy-delete)
+                               (define-advice lispy-shifttab (:around (orig-func &rest args) fix)
+                                 ;; restore the `org-overview' behaviour back to 9.1.9
+                                 (let ((org-outline-regexp-bol (concat "^" outline-regexp)))
+                                   (apply orig-func args)))
+                               (setq lispy-visit-method "projectile")))
   (add-hook 'lsp-mode-hook (lambda ()
                              (require 'lsp-clojure)
                              (defhydra+ hydra-lispy-x ()
@@ -394,17 +403,15 @@ layers configuration. You are free to put any user code."
                                  (if (bound-and-true-p lsp-mode)
                                      (lsp-find-definition)
                                    (jump-to-definition))))
-                             (lispy-define-key lispy-mode-map-special "e"
-                                               (if (bound-and-true-p lsp-mode)
-                                                   (if (looking-at lispy-left)
-                                                       (save-excursion
-                                                         (lispy-different)
-                                                         (cider-eval-last-sexp))
-                                                     (cider-eval-last-sexp))))))
+                             (defun custom-lispy-eval ()
+                               (interactive)
+                               (if (bound-and-true-p lsp-mode)
+                                   (cider-eval-sexp-at-point)
+                                 (lispy-eval 1)))
+                             (lispy-define-key lispy-mode-map-special "e" 'custom-lispy-eval)))
 
   ;; emacs lisp
   (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode "gr" 'xref-find-references)
-
 
   ;; (add-hook 'magit-mode-hook (lambda () (turn-on-magit-gitflow)))
   (setq browse-url-browser-function 'browse-url-firefox)
