@@ -399,6 +399,11 @@ layers configuration. You are free to put any user code."
                                                          (lispy-different)
                                                          (cider-eval-last-sexp))
                                                      (cider-eval-last-sexp))))))
+
+  ;; emacs lisp
+  (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode "gr" 'xref-find-references)
+
+
   ;; (add-hook 'magit-mode-hook (lambda () (turn-on-magit-gitflow)))
   (setq browse-url-browser-function 'browse-url-firefox)
   (setq vterm-max-scrollback 100000)
