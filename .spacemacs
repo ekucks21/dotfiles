@@ -355,14 +355,46 @@ layers configuration. You are free to put any user code."
   (setq helm-ag-base-command "ag --nocolor --nogroup -S")
   (setq message-directory "~/owa")
 
+  ;; evil
+  (defun evil-paste-kbd-macro-advice (&rest argv)
+    "make evil paste kbd-macro if register content is a macro.
+  this function check whether content is a macro by:
+  1. equal to `last-kbd-macro'
+  2. is a vector but not string
+  3. contain unprintable character"
+    (if (and (>= (length argv) 2)
+            (second argv))
+        (let* ((register (second argv))
+              (register-pair (assoc register register-alist))
+              (content (if register-pair (cdr register-pair))))
+          (if (and content
+                  (or (eq last-kbd-macro content)
+                      (vectorp content)
+                      (string-match "[^\t[:print:]\n\r]" content)))
+              (let ((last-kbd-macro content))
+                (forward-line)
+                (beginning-of-line)
+                (insert-kbd-macro '##)
+                (forward-line -2)
+                (search-forward "setq last-kbd-macro")
+                (replace-match "execute-kbd-macro")
+                t)))))
+  (advice-add 'evil-paste-after :before-until
+              'evil-paste-kbd-macro-advice)
+
   ;; helm
   (setq helm-ag-ignore-patterns '("cljs-out"))
 
   ;; cider
+  (with-eval-after-load "cider-inspector"
+    (define-key cider-inspector-mode-map
+      (kbd "f") 'ace-link-cider-inspector))
   (add-hook 'cider-mode-hook
             (lambda ()
               (cider-add-to-alist 'cider-jack-in-dependencies
-                                  "clj-commons/pomegranate" "1.2.1")))
+                                  "clj-commons/pomegranate" "1.2.1")
+              (define-clojure-indent
+                (prop/for-all '(1 ((:defn)) nil)))))
 
   ;; projectile
   (add-hook 'projectile-mode-hook
@@ -376,6 +408,7 @@ layers configuration. You are free to put any user code."
   (add-hook 'inf-clojure-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'cider-repl-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'clojurescript-mode-hook (lambda () (lispy-mode 1)))
+  (add-hook 'cider-connected-hook #'lispy--clojure-middleware-load)
   (add-hook 'lispy-mode-hook (lambda ()
                                (add-to-list 'lispy-compat 'cider)
                                (evil-define-key 'insert lispy-mode-map (kbd "/")
@@ -393,6 +426,7 @@ layers configuration. You are free to put any user code."
                              (require 'lsp-clojure)
                              (defhydra+ hydra-lispy-x ()
                                ("M" lsp-clojure-move-to-let "move to let")
+                               ("E" cljr-expand-let "expand let")
                                ("n" lsp-rename "move to let")
                                ("f" cljr-inline-symbol "inline symbol"))
                              (define-key lispy-mode-map (kbd "M-n") 'lispy-mark-symbol)
@@ -534,7 +568,7 @@ This function is called at the very end of Spacemacs initialization."
    '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "target" "out"))
  '(helm-ag-command-option " -U")
  '(helm-ag-use-agignore t)
- '(helm-ag-use-grep-ignore-list t)
+ '(helm-ag-use-grep-ignore-list t t)
  '(helm-boring-file-regexp-list
    '("\\.hi$" "\\.o$" "~$" "\\.bin$" "\\.lbin$" "\\.so$" "\\.a$" "\\.ln$" "\\.blg$" "\\.bbl$" "\\.elc$" "\\.lof$" "\\.glo$" "\\.idx$" "\\.lot$" "\\.svn/\\|\\.svn$" "\\.hg/\\|\\.hg$" "\\.git/\\|\\.git$" "\\.bzr/\\|\\.bzr$" "out/\\|out$" "target/\\|target$" "CVS/\\|CVS$" "_darcs/\\|_darcs$" "_MTN/\\|_MTN$" "\\.fmt$" "\\.tfm$" "\\.class$" "\\.fas$" "\\.lib$" "\\.mem$" "\\.x86f$" "\\.sparcf$" "\\.dfsl$" "\\.pfsl$" "\\.d64fsl$" "\\.p64fsl$" "\\.lx64fsl$" "\\.lx32fsl$" "\\.dx64fsl$" "\\.dx32fsl$" "\\.fx64fsl$" "\\.fx32fsl$" "\\.sx64fsl$" "\\.sx32fsl$" "\\.wx64fsl$" "\\.wx32fsl$" "\\.fasl$" "\\.ufsl$" "\\.fsl$" "\\.dxl$" "\\.lo$" "\\.la$" "\\.gmo$" "\\.mo$" "\\.toc$" "\\.aux$" "\\.cp$" "\\.fn$" "\\.ky$" "\\.pg$" "\\.tp$" "\\.vr$" "\\.cps$" "\\.fns$" "\\.kys$" "\\.pgs$" "\\.tps$" "\\.vrs$" "\\.pyc$" "\\.pyo$"))
  '(helm-completion-style 'emacs)
@@ -568,7 +602,10 @@ This function is called at the very end of Spacemacs initialization."
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(safe-local-variable-values
-   '((cider-ns-refresh-after-fn . "integrant.repl/resume")
+   '((lsp-yaml-schemas
+      (https://raw\.githubusercontent\.com/microsoft/azure-pipelines-vscode/v1\.174\.2/service-schema\.json .
+                                                                                                            ["**/*pipeline*"]))
+     (cider-ns-refresh-after-fn . "integrant.repl/resume")
      (cider-ns-refresh-before-fn . "integrant.repl/suspend")
      (typescript-backend . tide)
      (typescript-backend . lsp)
