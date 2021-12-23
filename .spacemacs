@@ -71,6 +71,10 @@ values."
      (clojure :variables
               clojure-enable-clj-refactor t
               ;; clojure-enable-linters 'clj-kondo
+              clojure-align-forms-automatically t
+              clojure-indent-style 'align-arguments
+              clojure-align-reader-conditionals t
+              cider-jdk-src-paths '("/usr/lib/jvm/openjdk-11/src.zip")
               )
      (lsp :variables
           ;; Formatting and indentation - use Cider instead
@@ -143,6 +147,7 @@ values."
                                       confluence
                                       table
                                       inf-mongo
+                                      lispyville
                                       inf-clojure
                                       edit-server
                                       soap-client
@@ -398,13 +403,41 @@ layers configuration. You are free to put any user code."
   (add-hook 'clojure-mode-hook
             (lambda ()
               (define-clojure-indent
-                (prop/for-all '(1 ((:defn)) nil)))))
-  (spacemacs/set-leader-keys-for-major-mode 'cider-mode "tL" 'cider-test-rerun-test)
+                (prop/for-all '(1 ((:defn)) nil))
+                (async 1)
+                (rf/reg-event-fx 'defun)
+                (rf/reg-event-db 'defun)
+                (reg-event-db 'defun)
+                (rf/reg-sub 'defun)
+                (fn-traced 1)
+                (defroutes 'defun)
+                (cond-> 1)
+                (cond->> 1)
+                (as-> 2)
+                (as->> 2)
+                (tp/it-> 1)
+                (GET 2)
+                (POST 2)
+                (PUT 2)
+                (DELETE 2)
+                (HEAD 2)
+                (ANY 2)
+                (OPTIONS 2)
+                (PATCH 2)
+                (rfn 2)
+                (let-routes 1)
+                (context 2)
+                (describe 1)
+                (beforeEach 1))))
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "tL" 'cider-test-rerun-test)
+  (spacemacs/set-leader-keys-for-major-mode 'cider-repl-mode "tL" 'cider-test-rerun-test)
+  (spacemacs/set-leader-keys-for-major-mode 'clojurescript-repl-mode "tL" 'cider-test-rerun-test)
+
   
   ;; projectile
   (add-hook 'projectile-mode-hook
             (lambda ()
-              (add-to-list 'projectile-globally-ignored-directories "cljs-out")))
+              (nconc projectile-globally-ignored-directories '("cljs-out" ".clj-kondo"))))
 
   ;; lispy
   (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
@@ -414,8 +447,6 @@ layers configuration. You are free to put any user code."
   (add-hook 'cider-repl-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'clojurescript-mode-hook (lambda () (lispy-mode 1)))
   (add-hook 'cider-connected-hook #'lispy--clojure-middleware-load)
-  (add-hook 'cider-repl-mode-hook (lambda ()
-                                    ))
   (add-hook 'lispy-mode-hook (lambda ()
                                (add-to-list 'lispy-compat 'cider)
                                (evil-define-key 'insert lispy-mode-map (kbd "/")
@@ -450,6 +481,28 @@ layers configuration. You are free to put any user code."
                                    (cider-eval-sexp-at-point)
                                  (lispy-eval 1)))
                              (lispy-define-key lispy-mode-map-special "e" 'custom-lispy-eval)))
+  (use-package lispyville
+    ;; :init
+    ;; (add-hook 'lispy-mode-hook #'lispyville-mode)
+    :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode) .
+           lispyville-mode)
+    :config
+    (progn
+      (diminish 'lispyville-mode (lispyville-mode-line-string ":cake:" ":cake:"))
+      (lispy-define-key lispy-mode-map "v" #'lispyville-toggle-mark-type)
+      (lispyville-set-key-theme '(additional
+                                  additional-insert
+                                  additional-motions
+                                  additional-wrap
+                                  c-u
+                                  c-w
+                                  commentary
+                                  escape
+                                  mark-toggle
+                                  operators
+                                  prettify
+                                  slurp/barf-lispy
+                                  text-objects))))
 
   ;; emacs lisp
   (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode "gr" 'xref-find-references)
