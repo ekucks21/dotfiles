@@ -73,7 +73,7 @@ map ,cs :action :cursive.repl.actions/search-history<CR>
 map ,cr :action Cursive.Repl.Command.refresh-repl<CR>
 map ,ci :action Cursive.Repl.Command.reset-integrant<CR>
 map ,n :action NextSplitter<CR>
-map ,p :action PreviousSplitter<CR>
+map ,p :action PrevSplitter<CR>
 map <C-I> :action Forward<CR>
 map <C-O> :action Back<CR>
 map ,u :action Unwrap<CR>

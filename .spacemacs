@@ -43,9 +43,10 @@ values."
      go
      javascript
      slack
-     terraform
+     (terraform :variables terraform-backend 'lsp)
      rust
      typescript
+     helpful
      python
      (conda :variables
             conda-anaconda-home "~/anaconda3/"
@@ -69,6 +70,119 @@ values."
      better-defaults
      emacs-lisp
      terraform
+     (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(auth-source-save-behavior nil)
+ '(cider-boot-parameters "dev")
+ '(cider-cljs-boot-repl
+   "(do (require 'weasel.repl.websocket) (cemerick.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))")
+ '(cider-cljs-lein-repl
+   "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
+ '(company-tooltip-common
+   ((t
+     (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection
+   ((t
+     (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(compilation-message-face 'default)
+ '(cua-global-mark-cursor-color "#2aa198")
+ '(cua-normal-cursor-color "#839496")
+ '(cua-overwrite-cursor-color "#b58900")
+ '(cua-read-only-cursor-color "#859900")
+ '(epa-file-cache-passphrase-for-symmetric-encryption t)
+ '(evil-want-Y-yank-to-eol t)
+ '(fci-rule-color "#073642")
+ '(grep-find-ignored-directories
+   '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "target" "out"))
+ '(helm-ag-command-option " -U")
+ '(helm-ag-use-agignore t)
+ '(helm-ag-use-grep-ignore-list t)
+ '(helm-boring-file-regexp-list
+   '("\\.hi$" "\\.o$" "~$" "\\.bin$" "\\.lbin$" "\\.so$" "\\.a$" "\\.ln$" "\\.blg$" "\\.bbl$" "\\.elc$" "\\.lof$" "\\.glo$" "\\.idx$" "\\.lot$" "\\.svn/\\|\\.svn$" "\\.hg/\\|\\.hg$" "\\.git/\\|\\.git$" "\\.bzr/\\|\\.bzr$" "out/\\|out$" "target/\\|target$" "CVS/\\|CVS$" "_darcs/\\|_darcs$" "_MTN/\\|_MTN$" "\\.fmt$" "\\.tfm$" "\\.class$" "\\.fas$" "\\.lib$" "\\.mem$" "\\.x86f$" "\\.sparcf$" "\\.dfsl$" "\\.pfsl$" "\\.d64fsl$" "\\.p64fsl$" "\\.lx64fsl$" "\\.lx32fsl$" "\\.dx64fsl$" "\\.dx32fsl$" "\\.fx64fsl$" "\\.fx32fsl$" "\\.sx64fsl$" "\\.sx32fsl$" "\\.wx64fsl$" "\\.wx32fsl$" "\\.fasl$" "\\.ufsl$" "\\.fsl$" "\\.dxl$" "\\.lo$" "\\.la$" "\\.gmo$" "\\.mo$" "\\.toc$" "\\.aux$" "\\.cp$" "\\.fn$" "\\.ky$" "\\.pg$" "\\.tp$" "\\.vr$" "\\.cps$" "\\.fns$" "\\.kys$" "\\.pgs$" "\\.tps$" "\\.vrs$" "\\.pyc$" "\\.pyo$"))
+ '(helm-completion-style 'emacs)
+ '(helm-external-programs-associations '(("pdf" . "brave-browser-stable")))
+ '(highlight-changes-colors '("#d33682" "#6c71c4"))
+ '(highlight-symbol-colors
+   '("#3b2b40b432a1" "#07ab45f64ce9" "#475733ea3554" "#1d623c04567f" "#2d5343d8332c" "#436f35f73166" "#0613413e597e"))
+ '(highlight-symbol-foreground-color "#93a1a1")
+ '(highlight-tail-colors
+   '(("#073642" . 0)
+     ("#5b7300" . 20)
+     ("#007d76" . 30)
+     ("#0061a8" . 50)
+     ("#866300" . 60)
+     ("#992700" . 70)
+     ("#a00559" . 85)
+     ("#073642" . 100)))
+ '(hl-bg-colors
+   '("#866300" "#992700" "#a7020a" "#a00559" "#243e9b" "#0061a8" "#007d76" "#5b7300"))
+ '(hl-fg-colors
+   '("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36"))
+ '(lsp-ui-doc-border "#93a1a1")
+ '(magit-cherry-pick-arguments '("-x"))
+ '(magit-pull-arguments '("--rebase"))
+ '(nrepl-message-colors
+   '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4"))
+ '(org-agenda-files '("/home/kuckse/sb/dotfiles/.spacemacs"))
+ '(org-startup-truncated nil)
+ '(package-selected-packages
+   '(inf-mongo terraform-mode hcl-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode ahk-mode org-mime ghub let-alist sesman toml-mode tide typescript-mode racer pos-tip go-guru go-eldoc company-go go-mode cargo rust-mode robe bundler rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake minitest chruby inf-ruby nginx-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor js2-mode js-doc company-tern tern coffee-mode lispy zoutline swiper ivy powershell yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sqlplus sql-indent spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode psvn popwin plsql pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode jinja2-mode jdee memoize intero flycheck info+ indent-guide hy-mode dash-functional hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav edit-server edbi epc ctable concurrent deferred dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat diminish diff-hl define-word dactyl-mode cython-mode csv-mode confluence xml-rpc company-web web-completion-data company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-ansible company-anaconda company column-enforce-mode cmm-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider seq spinner queue pkg-info clojure-mode epl bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible anaconda-mode pythonic f dash s aggressive-indent adoc-mode markup-faces adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup))
+ '(paradox-automatically-star t)
+ '(pos-tip-background-color "#073642")
+ '(pos-tip-foreground-color "#93a1a1")
+ '(safe-local-variable-values
+   '((eval progn
+           (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.yarn-cache-1000\\'")
+           (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\cljs-out\\'"))
+     (cider-ns-refresh-after-fn . "integrant.repl/resume")
+     (cider-ns-refresh-before-fn . "integrant.repl/suspend")
+     (typescript-backend . tide)
+     (typescript-backend . lsp)
+     (javascript-backend . tide)
+     (javascript-backend . tern)
+     (javascript-backend . lsp)
+     (cider-cljs-lein-repl . "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")))
+ '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
+ '(term-default-bg-color "#002b36")
+ '(term-default-fg-color "#839496")
+ '(vc-annotate-background nil)
+ '(vc-annotate-background-mode nil)
+ '(vc-annotate-color-map
+   '((20 . "#dc322f")
+     (40 . "#ca7966832090")
+     (60 . "#c05578c91534")
+     (80 . "#b58900")
+     (100 . "#a6088eed0000")
+     (120 . "#9e3a91a60000")
+     (140 . "#9628943b0000")
+     (160 . "#8dc596ad0000")
+     (180 . "#859900")
+     (200 . "#76ef9b6045e8")
+     (220 . "#6cd69ca95b9d")
+     (240 . "#5f5f9e06701f")
+     (260 . "#4c1a9f778424")
+     (280 . "#2aa198")
+     (300 . "#3002984eaf4d")
+     (320 . "#2f6f93e8bae0")
+     (340 . "#2c598f79c66f")
+     (360 . "#268bd2")))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   '(unspecified "#002b36" "#073642" "#a7020a" "#dc322f" "#5b7300" "#859900" "#866300" "#b58900" "#0061a8" "#268bd2" "#a00559" "#d33682" "#007d76" "#2aa198" "#839496" "#657b83"))
+ '(xterm-color-names
+   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
+ '(xterm-color-names-bright
+   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
+)structurizr
      (clojure :variables
               clojure-enable-clj-refactor t
               ;; clojure-enable-linters 'clj-kondo
@@ -129,8 +243,9 @@ values."
      org
      (shell :variables
             shell-default-shell 'vterm
+            shell-default-term-shell "/bin/zsh"
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'left)
      (spell-checking :variables spell-checking-enable-by-default nil)
      syntax-checking
      sql
@@ -145,7 +260,6 @@ values."
                                       envrc
                                       lispy
                                       (setenv-file :location (recipe :fetcher github :repo "cfclrk/setenv-file"))
-                                      confluence
                                       table
                                       inf-mongo
                                       lispyville
@@ -212,7 +326,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Droid Sans Mono Dotted for Powerline Regular"
+   dotspacemacs-default-font '("MesloLGS NF"
                                :size 11
                                :weight normal
                                :width normal
@@ -338,6 +452,7 @@ layers configuration. You are free to put any user code."
   (spacemacs/set-leader-keys "pA" 'helm-projectile-find-file-in-known-projects)
   (spacemacs|forall-clojure-modes m
     (spacemacs/set-leader-keys-for-major-mode m "gg" 'lsp-find-definition)
+    (spacemacs/set-leader-keys-for-major-mode m "=i" 'indent-sexp)
     (spacemacs/set-leader-keys-for-major-mode m "ram" 'lsp-clojure-add-missing-libspec))
   (load "~/.emacs.d/.cache/quelpa/build/setenv-file/setenv-file.el")
   (setq setenv-file-dir (expand-file-name "~/creds/"))
@@ -394,6 +509,7 @@ layers configuration. You are free to put any user code."
   ;; cider
   (with-eval-after-load "cider-inspector"
     (set-variable 'cider-lein-parameters "with-profile +dev repl")
+    (setq cider-clojure-cli-global-options "-A:versions:dev:test")
     (define-key cider-inspector-mode-map
       (kbd "f") 'ace-link-cider-inspector))
   (add-hook 'clojure-mode-hook #'cider-mode)
@@ -443,8 +559,17 @@ layers configuration. You are free to put any user code."
   (with-eval-after-load 'projectile
     (setq projectile-indexing-method 'hybrid)
     (setq projectile-globally-ignored-directories
-          (append '("cljs-out" ".clj-kondo") projectile-globally-ignored-directories)))
+          (append '("cljs-out" ".clj-kondo") projectile-globally-ignored-directories))
+    (defadvice projectile-project-root (around ignore-remote first activate)
+      (unless (file-remote-p default-directory) ad-do-it)))
 
+  ;; tramp
+  (with-eval-after-load 'tramp
+    (setq vc-handled-backends '(Git)))
+
+  ;; recentf
+  ;; (with-eval-after-load 'recentf
+  ;;   (run-at-time (current-time) 300 'recentf-save-list))
 
   ;; lispy
   (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
@@ -466,7 +591,9 @@ layers configuration. You are free to put any user code."
                                  ;; restore the `org-overview' behaviour back to 9.1.9
                                  (let ((org-outline-regexp-bol (concat "^" outline-regexp)))
                                    (apply orig-func args)))
-                               (setq lispy-visit-method "projectile")))
+                               (setq lispy-visit-method "projectile")
+                               (lispy-define-key lispy-mode-map-special "/" 'lispy-splice)
+                               (lispy-define-key lispy-mode-map-special "i" 'clojure-align)))
   (add-hook 'lsp-mode-hook (lambda ()
                              (require 'lsp-clojure)
                              (defhydra+ hydra-lispy-x ()
@@ -475,7 +602,6 @@ layers configuration. You are free to put any user code."
                                ("n" lsp-rename "rename symbol")
                                ("f" cljr-inline-symbol "inline symbol"))
                              (define-key lispy-mode-map (kbd "M-n") 'lispy-mark-symbol)
-                             (lispy-define-key lispy-mode-map-special "/" 'lispy-splice)
                              (define-key lispy-mode-map (kbd "M-.")
                                (lambda ()
                                  (interactive)
@@ -527,6 +653,7 @@ layers configuration. You are free to put any user code."
     ;;             (add-hook 'evil-insert-state-entry-hook
     ;;                       'evil-emacs-state
     ;;                       nil t)))
+    (evil-collection-define-key 'normal 'vterm-mode-map "s" 'evil-avy-goto-char-2)
     (setq vterm-buffer-name-string "T: %s")
     (setq vterm-max-scrollback 100000)
     (evil-define-key 'emacs vterm-mode-map
@@ -558,10 +685,14 @@ layers configuration. You are free to put any user code."
   (setenv "PATH" (concat (getenv "PATH") ":/usr/lib/oracle/12.2/client64/bin"))
   (setq exec-path (append exec-path '("/usr/lib/oracle/12.2/client64/bin")))
   (setq evil-ex-visual-char-range t)
-  (setq-default evil-escape-excluded-major-modes '(vterm-mode))
+  (setq evil-want-minibuffer t)
+  ;; (setq-default evil-escape-excluded-major-modes '(vterm-mode))
 
-  (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
-  (define-key evil-motion-state-map (kbd "s") 'avy-goto-char-2)
+  ;; (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
+  ;; (define-key evilem-map (kbd "s") 'evil-avy-goto-char-2)
+  (evil-global-set-key 'normal "s" 'evil-avy-goto-char-2)
+  (evil-global-set-key 'normal "f" 'evil-avy-goto-char-in-line)
+  (evil-global-set-key 'motion "s" 'evil-avy-goto-char-2)
   (add-hook 'text-mode-hook #'visual-line-mode)
   (setq dotspacemacs-distinguish-gui-tab t)
   ;; (add-to-list 'evil-escape-excluded-major-modes 'vterm-mode)
@@ -636,108 +767,4 @@ layers configuration. You are free to put any user code."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(auth-source-save-behavior nil)
- '(cider-boot-parameters "dev")
- '(cider-cljs-boot-repl
-   "(do (require 'weasel.repl.websocket) (cemerick.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))")
- '(cider-cljs-lein-repl
-   "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
- '(company-tooltip-common
-   ((t
-     (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection
-   ((t
-     (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(compilation-message-face 'default)
- '(cua-global-mark-cursor-color "#2aa198")
- '(cua-normal-cursor-color "#839496")
- '(cua-overwrite-cursor-color "#b58900")
- '(cua-read-only-cursor-color "#859900")
- '(epa-file-cache-passphrase-for-symmetric-encryption t)
- '(evil-want-Y-yank-to-eol t)
- '(fci-rule-color "#073642")
- '(grep-find-ignored-directories
-   '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "target" "out"))
- '(helm-ag-command-option " -U")
- '(helm-ag-use-agignore t)
- '(helm-ag-use-grep-ignore-list t)
- '(helm-boring-file-regexp-list
-   '("\\.hi$" "\\.o$" "~$" "\\.bin$" "\\.lbin$" "\\.so$" "\\.a$" "\\.ln$" "\\.blg$" "\\.bbl$" "\\.elc$" "\\.lof$" "\\.glo$" "\\.idx$" "\\.lot$" "\\.svn/\\|\\.svn$" "\\.hg/\\|\\.hg$" "\\.git/\\|\\.git$" "\\.bzr/\\|\\.bzr$" "out/\\|out$" "target/\\|target$" "CVS/\\|CVS$" "_darcs/\\|_darcs$" "_MTN/\\|_MTN$" "\\.fmt$" "\\.tfm$" "\\.class$" "\\.fas$" "\\.lib$" "\\.mem$" "\\.x86f$" "\\.sparcf$" "\\.dfsl$" "\\.pfsl$" "\\.d64fsl$" "\\.p64fsl$" "\\.lx64fsl$" "\\.lx32fsl$" "\\.dx64fsl$" "\\.dx32fsl$" "\\.fx64fsl$" "\\.fx32fsl$" "\\.sx64fsl$" "\\.sx32fsl$" "\\.wx64fsl$" "\\.wx32fsl$" "\\.fasl$" "\\.ufsl$" "\\.fsl$" "\\.dxl$" "\\.lo$" "\\.la$" "\\.gmo$" "\\.mo$" "\\.toc$" "\\.aux$" "\\.cp$" "\\.fn$" "\\.ky$" "\\.pg$" "\\.tp$" "\\.vr$" "\\.cps$" "\\.fns$" "\\.kys$" "\\.pgs$" "\\.tps$" "\\.vrs$" "\\.pyc$" "\\.pyo$"))
- '(helm-completion-style 'emacs)
- '(highlight-changes-colors '("#d33682" "#6c71c4"))
- '(highlight-symbol-colors
-   '("#3b2b40b432a1" "#07ab45f64ce9" "#475733ea3554" "#1d623c04567f" "#2d5343d8332c" "#436f35f73166" "#0613413e597e"))
- '(highlight-symbol-foreground-color "#93a1a1")
- '(highlight-tail-colors
-   '(("#073642" . 0)
-     ("#5b7300" . 20)
-     ("#007d76" . 30)
-     ("#0061a8" . 50)
-     ("#866300" . 60)
-     ("#992700" . 70)
-     ("#a00559" . 85)
-     ("#073642" . 100)))
- '(hl-bg-colors
-   '("#866300" "#992700" "#a7020a" "#a00559" "#243e9b" "#0061a8" "#007d76" "#5b7300"))
- '(hl-fg-colors
-   '("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36"))
- '(lsp-ui-doc-border "#93a1a1")
- '(magit-cherry-pick-arguments '("-x"))
- '(magit-pull-arguments '("--rebase"))
- '(nrepl-message-colors
-   '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4"))
- '(org-agenda-files
-   '("/home/kuckse/sb/dotfiles/.spacemacs" "/home/kuckse/.org/job.org"))
- '(org-startup-truncated nil)
- '(package-selected-packages
-   '(parseclj parseedn inf-mongo terraform-mode hcl-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode ahk-mode org-mime ghub let-alist sesman toml-mode tide typescript-mode racer pos-tip go-guru go-eldoc company-go go-mode cargo rust-mode robe bundler rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake minitest chruby inf-ruby nginx-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor js2-mode js-doc company-tern tern coffee-mode lispy zoutline swiper ivy powershell yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sqlplus sql-indent spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode psvn popwin plsql pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode jinja2-mode jdee memoize intero flycheck info+ indent-guide hy-mode dash-functional hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav edit-server edbi epc ctable concurrent deferred dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat diminish diff-hl define-word dactyl-mode cython-mode csv-mode confluence xml-rpc company-web web-completion-data company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-ansible company-anaconda company column-enforce-mode cmm-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider seq spinner queue pkg-info clojure-mode epl bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible anaconda-mode pythonic f dash s aggressive-indent adoc-mode markup-faces adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup))
- '(paradox-automatically-star t)
- '(pos-tip-background-color "#073642")
- '(pos-tip-foreground-color "#93a1a1")
- '(safe-local-variable-values
-   '((cider-ns-refresh-after-fn . "integrant.repl/resume")
-     (cider-ns-refresh-before-fn . "integrant.repl/suspend")
-     (cider-cljs-lein-repl . "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")))
- '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
- '(term-default-bg-color "#002b36")
- '(term-default-fg-color "#839496")
- '(vc-annotate-background nil)
- '(vc-annotate-background-mode nil)
- '(vc-annotate-color-map
-   '((20 . "#dc322f")
-     (40 . "#ca7966832090")
-     (60 . "#c05578c91534")
-     (80 . "#b58900")
-     (100 . "#a6088eed0000")
-     (120 . "#9e3a91a60000")
-     (140 . "#9628943b0000")
-     (160 . "#8dc596ad0000")
-     (180 . "#859900")
-     (200 . "#76ef9b6045e8")
-     (220 . "#6cd69ca95b9d")
-     (240 . "#5f5f9e06701f")
-     (260 . "#4c1a9f778424")
-     (280 . "#2aa198")
-     (300 . "#3002984eaf4d")
-     (320 . "#2f6f93e8bae0")
-     (340 . "#2c598f79c66f")
-     (360 . "#268bd2")))
- '(vc-annotate-very-old-color nil)
- '(weechat-color-list
-   '(unspecified "#002b36" "#073642" "#a7020a" "#dc322f" "#5b7300" "#859900" "#866300" "#b58900" "#0061a8" "#268bd2" "#a00559" "#d33682" "#007d76" "#2aa198" "#839496" "#657b83"))
- '(xterm-color-names
-   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
- '(xterm-color-names-bright
-   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
-)
+
