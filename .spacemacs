@@ -81,9 +81,9 @@ values."
               )
      (lsp :variables
           ;; Formatting and indentation - use Cider instead
-          lsp-enable-on-type-formatting t
+          lsp-enable-on-type-formatting nil
           ;; Set to nil to use CIDER features instead of LSP UI
-          lsp-enable-indentation t
+          lsp-enable-indentation nil
           lsp-enable-snippet t ;; to test again
 
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
@@ -124,7 +124,7 @@ values."
      gnus
      (colors :variables colors-colorize-identifiers 'variables)
      docker
-     git
+     (git :variables git-enable-magit-todos-plugin t)
      (yaml :variables
            yaml-enable-lsp t)
      ;; markdown
@@ -151,6 +151,7 @@ values."
                                       (setenv-file :location (recipe :fetcher github :repo "cfclrk/setenv-file"))
                                       table
                                       inf-mongo
+                                      ;; org-modern
                                       lispyville
                                       inf-clojure
                                       edit-server
@@ -392,11 +393,16 @@ layers configuration. You are free to put any user code."
   (advice-add 'evil-paste-after :before-until
               'evil-paste-kbd-macro-advice)
 
+  ;; (use-package org-modern
+  ;;   :config
+  ;;   (add-hook 'org-mode-hook #'org-modern-mode)
+  ;;   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda))
+
   ;; ob-http
   (use-package ob-http
     :config
     (add-to-list 'org-babel-load-languages
-                 '((http . t))))
+                 '(http . t)))
 
   ;; helm
   (setq helm-ag-ignore-patterns '("cljs-out"))
@@ -415,9 +421,9 @@ layers configuration. You are free to put any user code."
                                   "clj-commons/pomegranate" "1.2.1")))
   (add-hook 'clojure-mode-hook
             (lambda ()
-              (add-to-list 'clojure-align-binding-forms "prop/for-all")
               (define-clojure-indent
                (prop/for-all '(1 ((:defn)) :form))
+               (chuck/checking '(2 ((:defn)) :form))
                (async 1)
                (rf/reg-event-fx 'defun)
                (rf/reg-event-db 'defun)
@@ -497,6 +503,8 @@ layers configuration. You are free to put any user code."
                                ("E" cljr-expand-let "expand let")
                                ("n" lsp-rename "rename symbol")
                                ("f" cljr-inline-symbol "inline symbol"))
+                             (when (eq major-mode 'clojure-mode)
+                               (setq-local lsp-enable-indentation nil))
                              (define-key lispy-mode-map (kbd "M-n") 'lispy-mark-symbol)
                              (define-key lispy-mode-map (kbd "M-.")
                                          (lambda ()
@@ -717,30 +725,28 @@ This function is called at the very end of Spacemacs initialization."
  '(lsp-ui-doc-border "#93a1a1")
  '(magit-cherry-pick-arguments '("-x"))
  '(magit-pull-arguments '("--rebase"))
+ '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(nrepl-message-colors
    '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4"))
  '(org-agenda-files
    '("/home/kuckse/sb/dotfiles/.spacemacs" "/home/kuckse/.org/job.org"))
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(ob-http inf-mongo terraform-mode hcl-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode ahk-mode org-mime ghub let-alist sesman toml-mode tide typescript-mode racer pos-tip go-guru go-eldoc company-go go-mode cargo rust-mode robe bundler rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake minitest chruby inf-ruby nginx-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor js2-mode js-doc company-tern tern coffee-mode lispy zoutline swiper ivy powershell yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sqlplus sql-indent spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode psvn popwin plsql pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode jinja2-mode jdee memoize intero flycheck info+ indent-guide hy-mode dash-functional hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav edit-server edbi epc ctable concurrent deferred dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat diminish diff-hl define-word dactyl-mode cython-mode csv-mode confluence xml-rpc company-web web-completion-data company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-ansible company-anaconda company column-enforce-mode cmm-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider seq spinner queue pkg-info clojure-mode epl bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible anaconda-mode pythonic f dash s aggressive-indent adoc-mode markup-faces adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup))
+   '(inf-mongo terraform-mode hcl-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode ahk-mode org-mime ghub let-alist sesman toml-mode tide typescript-mode racer pos-tip go-guru go-eldoc company-go go-mode cargo rust-mode robe bundler rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake minitest chruby inf-ruby nginx-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor js2-mode js-doc company-tern tern coffee-mode lispy zoutline swiper ivy powershell yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sqlplus sql-indent spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode psvn popwin plsql pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode jinja2-mode jdee memoize intero flycheck info+ indent-guide hy-mode dash-functional hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav edit-server edbi epc ctable concurrent deferred dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat diminish diff-hl define-word dactyl-mode cython-mode csv-mode confluence xml-rpc company-web web-completion-data company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-ansible company-anaconda company column-enforce-mode cmm-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider seq spinner queue pkg-info clojure-mode epl bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible anaconda-mode pythonic f dash s aggressive-indent adoc-mode markup-faces adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup))
  '(paradox-automatically-star t)
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(safe-local-variable-values
    '((eval progn
-           (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.terraform\\'"))
-     (lsp-yaml-schemas
-      (https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/v1.174.2/service-schema.json .
-                                                                                                       ["**/*pipeline*"]))
-     (eval progn
-           (add-to-list 'cljr-libspec-whitelist "^atallc.airdex-data.http-api.server")
-           (add-to-list 'cljr-libspec-whitelist "^atallc.airdex-data.http-api.efb"))
-     (eval progn
            (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.yarn-cache-1000\\'")
            (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\cljs-out\\'"))
      (cider-ns-refresh-after-fn . "integrant.repl/resume")
      (cider-ns-refresh-before-fn . "integrant.repl/suspend")
+     (typescript-backend . tide)
+     (typescript-backend . lsp)
+     (javascript-backend . tide)
+     (javascript-backend . tern)
+     (javascript-backend . lsp)
      (cider-cljs-lein-repl . "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")))
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
  '(term-default-bg-color "#002b36")
