@@ -341,7 +341,7 @@ layers configuration. You are free to put any user code."
   ;; (spacemacs/set-leader-keys-for-major-mode 'lsp-mode "lr" 'lsp-find-references)
   (spacemacs/set-leader-keys "pA" 'helm-projectile-find-file-in-known-projects)
   (spacemacs|forall-clojure-modes m
-    (spacemacs/set-leader-keys-for-major-mode m "gg" 'lsp-find-definition)
+    (spacemacs/set-leader-keys-for-major-mode m "gg" 'cider-find-var)
     (spacemacs/set-leader-keys-for-major-mode m "=i" 'indent-sexp)
     (spacemacs/set-leader-keys-for-major-mode m "ram" 'lsp-clojure-add-missing-libspec))
   (load "~/.emacs.d/.cache/quelpa/build/setenv-file/setenv-file.el")
@@ -413,6 +413,14 @@ layers configuration. You are free to put any user code."
     (setq cider-clojure-cli-global-options "-A:versions:dev:test")
     (define-key cider-inspector-mode-map
                 (kbd "f") 'ace-link-cider-inspector))
+  ;; (with-eval-after-load 'clojure
+  ;;   (setq cider-prompt-for-symbol nil))
+
+  (use-package cider
+    :config
+    (progn
+      (setq cider-prompt-for-symbol nil)))
+
   (add-hook 'clojure-mode-hook #'cider-mode)
   (add-hook 'cider-mode-hook
             (lambda ()
@@ -425,6 +433,8 @@ layers configuration. You are free to put any user code."
                (prop/for-all '(1 ((:defn)) :form))
                (chuck/checking '(2 ((:defn)) :form))
                (async 1)
+               (mfn/providing 1)
+               (mfn/verifying 1)
                (rf/reg-event-fx 'defun)
                (rf/reg-event-db 'defun)
                (reg-event-db 'defun)
@@ -700,7 +710,7 @@ This function is called at the very end of Spacemacs initialization."
    '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "target" "out"))
  '(helm-ag-command-option " -U")
  '(helm-ag-use-agignore t)
- '(helm-ag-use-grep-ignore-list t t)
+ '(helm-ag-use-grep-ignore-list t)
  '(helm-boring-file-regexp-list
    '("\\.hi$" "\\.o$" "~$" "\\.bin$" "\\.lbin$" "\\.so$" "\\.a$" "\\.ln$" "\\.blg$" "\\.bbl$" "\\.elc$" "\\.lof$" "\\.glo$" "\\.idx$" "\\.lot$" "\\.svn/\\|\\.svn$" "\\.hg/\\|\\.hg$" "\\.git/\\|\\.git$" "\\.bzr/\\|\\.bzr$" "out/\\|out$" "target/\\|target$" "CVS/\\|CVS$" "_darcs/\\|_darcs$" "_MTN/\\|_MTN$" "\\.fmt$" "\\.tfm$" "\\.class$" "\\.fas$" "\\.lib$" "\\.mem$" "\\.x86f$" "\\.sparcf$" "\\.dfsl$" "\\.pfsl$" "\\.d64fsl$" "\\.p64fsl$" "\\.lx64fsl$" "\\.lx32fsl$" "\\.dx64fsl$" "\\.dx32fsl$" "\\.fx64fsl$" "\\.fx32fsl$" "\\.sx64fsl$" "\\.sx32fsl$" "\\.wx64fsl$" "\\.wx32fsl$" "\\.fasl$" "\\.ufsl$" "\\.fsl$" "\\.dxl$" "\\.lo$" "\\.la$" "\\.gmo$" "\\.mo$" "\\.toc$" "\\.aux$" "\\.cp$" "\\.fn$" "\\.ky$" "\\.pg$" "\\.tp$" "\\.vr$" "\\.cps$" "\\.fns$" "\\.kys$" "\\.pgs$" "\\.tps$" "\\.vrs$" "\\.pyc$" "\\.pyo$"))
  '(helm-completion-style 'emacs)
