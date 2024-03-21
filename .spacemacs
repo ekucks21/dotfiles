@@ -34,7 +34,8 @@ values."
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
-   '(systemd
+   '(graphviz
+     systemd
      nginx
      php
      (java :variables java-backend 'lsp)
@@ -145,6 +146,8 @@ values."
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(
                                       org-contrib
+                                      plantuml-mode
+                                      sqlite3
                                       ob-http
                                       envrc
                                       lispy
@@ -366,6 +369,19 @@ layers configuration. You are free to put any user code."
   (setq helm-ag-base-command "ag --nocolor --nogroup -S")
   (setq message-directory "~/owa")
 
+  (use-package plantuml-mode
+    :custom
+    (plantuml-default-exec-mode 'executable)
+    (org-plantuml-exec-mode 'plantuml))
+
+  (use-package ob
+    :ensure nil
+    :after plantuml-mode
+    :hook (org-mode .
+                    (lambda ()
+                      (org-babel-do-load-languages 'org-babel-load-languages
+                                                   '((plantuml . t))))))
+
   ;; evil
   (defun evil-paste-kbd-macro-advice (&rest argv)
     "make evil paste kbd-macro if register content is a macro.
@@ -404,15 +420,20 @@ layers configuration. You are free to put any user code."
     (add-to-list 'org-babel-load-languages
                  '(http . t)))
 
+  ;; dired
+  (use-package dired
+    :custom
+    (dired-create-destination-dirs 'ask))
+
   ;; helm
   (setq helm-ag-ignore-patterns '("cljs-out"))
 
   ;; cider
   (with-eval-after-load "cider-inspector"
     (set-variable 'cider-lein-parameters "with-profile +dev repl")
-    (setq cider-clojure-cli-global-options "-A:versions:dev:test")
+    ;; (setq cider-clojure-cli-global-options nil)
     (define-key cider-inspector-mode-map
-                (kbd "f") 'ace-link-cider-inspector))
+      (kbd "f") 'ace-link-cider-inspector))
   ;; (with-eval-after-load 'clojure
   ;;   (setq cider-prompt-for-symbol nil))
 
@@ -430,35 +451,35 @@ layers configuration. You are free to put any user code."
   (add-hook 'clojure-mode-hook
             (lambda ()
               (define-clojure-indent
-               (prop/for-all '(1 ((:defn)) :form))
-               (chuck/checking '(2 ((:defn)) :form))
-               (async 1)
-               (mfn/providing 1)
-               (mfn/verifying 1)
-               (rf/reg-event-fx 'defun)
-               (rf/reg-event-db 'defun)
-               (reg-event-db 'defun)
-               (rf/reg-sub 'defun)
-               (fn-traced 1)
-               (defroutes 'defun)
-               (cond-> 1)
-               (cond->> 1)
-               (as-> 2)
-               (as->> 2)
-               (tp/it-> 1)
-               (GET 2)
-               (POST 2)
-               (PUT 2)
-               (DELETE 2)
-               (HEAD 2)
-               (ANY 2)
-               (OPTIONS 2)
-               (PATCH 2)
-               (rfn 2)
-               (let-routes 1)
-               (context 2)
-               (describe 1)
-               (beforeEach 1))))
+                (prop/for-all '(1 ((:defn)) :form))
+                (chuck/checking '(2 ((:defn)) :form))
+                (async 1)
+                (mfn/providing 1)
+                (mfn/verifying 1)
+                (rf/reg-event-fx 'defun)
+                (rf/reg-event-db 'defun)
+                (reg-event-db 'defun)
+                (rf/reg-sub 'defun)
+                (fn-traced 1)
+                (defroutes 'defun)
+                (cond-> 1)
+                (cond->> 1)
+                (as-> 2)
+                (as->> 2)
+                (tp/it-> 1)
+                (GET 2)
+                (POST 2)
+                (PUT 2)
+                (DELETE 2)
+                (HEAD 2)
+                (ANY 2)
+                (OPTIONS 2)
+                (PATCH 2)
+                (rfn 2)
+                (let-routes 1)
+                (context 2)
+                (describe 1)
+                (beforeEach 1))))
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "tL" 'cider-test-rerun-test)
   (spacemacs/set-leader-keys-for-major-mode 'cider-repl-mode "tL" 'cider-test-rerun-test)
   (spacemacs/set-leader-keys-for-major-mode 'clojurescript-repl-mode "tL" 'cider-test-rerun-test)
@@ -517,11 +538,11 @@ layers configuration. You are free to put any user code."
                                (setq-local lsp-enable-indentation nil))
                              (define-key lispy-mode-map (kbd "M-n") 'lispy-mark-symbol)
                              (define-key lispy-mode-map (kbd "M-.")
-                                         (lambda ()
-                                           (interactive)
-                                           (if (bound-and-true-p lsp-mode)
-                                               (lsp-find-definition)
-                                             (jump-to-definition))))
+                               (lambda ()
+                                 (interactive)
+                                 (if (bound-and-true-p lsp-mode)
+                                     (lsp-find-definition)
+                                   (jump-to-definition))))
                              (defun custom-lispy-eval ()
                                (interactive)
                                (if (bound-and-true-p lsp-mode)
@@ -557,7 +578,12 @@ layers configuration. You are free to put any user code."
   (spacemacs/set-leader-keys-for-major-mode 'clojurescript-mode "rrs" 'cljr-rename-symbol)
 
   ;; magit
-  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  (use-package magit
+    :config
+    (progn
+      (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+      (transient-append-suffix 'magit-fetch "-t"
+        '("-f" "Bypass safety checks" "--force"))))
 
   ;; vterm
   (with-eval-after-load 'vterm
@@ -714,7 +740,9 @@ This function is called at the very end of Spacemacs initialization."
  '(helm-boring-file-regexp-list
    '("\\.hi$" "\\.o$" "~$" "\\.bin$" "\\.lbin$" "\\.so$" "\\.a$" "\\.ln$" "\\.blg$" "\\.bbl$" "\\.elc$" "\\.lof$" "\\.glo$" "\\.idx$" "\\.lot$" "\\.svn/\\|\\.svn$" "\\.hg/\\|\\.hg$" "\\.git/\\|\\.git$" "\\.bzr/\\|\\.bzr$" "out/\\|out$" "target/\\|target$" "CVS/\\|CVS$" "_darcs/\\|_darcs$" "_MTN/\\|_MTN$" "\\.fmt$" "\\.tfm$" "\\.class$" "\\.fas$" "\\.lib$" "\\.mem$" "\\.x86f$" "\\.sparcf$" "\\.dfsl$" "\\.pfsl$" "\\.d64fsl$" "\\.p64fsl$" "\\.lx64fsl$" "\\.lx32fsl$" "\\.dx64fsl$" "\\.dx32fsl$" "\\.fx64fsl$" "\\.fx32fsl$" "\\.sx64fsl$" "\\.sx32fsl$" "\\.wx64fsl$" "\\.wx32fsl$" "\\.fasl$" "\\.ufsl$" "\\.fsl$" "\\.dxl$" "\\.lo$" "\\.la$" "\\.gmo$" "\\.mo$" "\\.toc$" "\\.aux$" "\\.cp$" "\\.fn$" "\\.ky$" "\\.pg$" "\\.tp$" "\\.vr$" "\\.cps$" "\\.fns$" "\\.kys$" "\\.pgs$" "\\.tps$" "\\.vrs$" "\\.pyc$" "\\.pyo$"))
  '(helm-completion-style 'emacs)
- '(helm-external-programs-associations '(("pdf" . "brave-browser-stable")))
+ '(helm-external-programs-associations
+   '(("PDF" . "brave-browser")
+     ("pdf" . "brave-browser-stable")))
  '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
    '("#3b2b40b432a1" "#07ab45f64ce9" "#475733ea3554" "#1d623c04567f" "#2d5343d8332c" "#436f35f73166" "#0613413e597e"))
@@ -742,16 +770,35 @@ This function is called at the very end of Spacemacs initialization."
    '("/home/kuckse/sb/dotfiles/.spacemacs" "/home/kuckse/.org/job.org"))
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(inf-mongo terraform-mode hcl-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode ahk-mode org-mime ghub let-alist sesman toml-mode tide typescript-mode racer pos-tip go-guru go-eldoc company-go go-mode cargo rust-mode robe bundler rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake minitest chruby inf-ruby nginx-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor js2-mode js-doc company-tern tern coffee-mode lispy zoutline swiper ivy powershell yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sqlplus sql-indent spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode psvn popwin plsql pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode jinja2-mode jdee memoize intero flycheck info+ indent-guide hy-mode dash-functional hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav edit-server edbi epc ctable concurrent deferred dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat diminish diff-hl define-word dactyl-mode cython-mode csv-mode confluence xml-rpc company-web web-completion-data company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-ansible company-anaconda company column-enforce-mode cmm-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider seq spinner queue pkg-info clojure-mode epl bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible anaconda-mode pythonic f dash s aggressive-indent adoc-mode markup-faces adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup))
+   '(plantuml-mode inf-mongo terraform-mode hcl-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode ahk-mode org-mime ghub let-alist sesman toml-mode tide typescript-mode racer pos-tip go-guru go-eldoc company-go go-mode cargo rust-mode robe bundler rvm ruby-tools ruby-test-mode rubocop rspec-mode rbenv rake minitest chruby inf-ruby nginx-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor js2-mode js-doc company-tern tern coffee-mode lispy zoutline swiper ivy powershell yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sqlplus sql-indent spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode psvn popwin plsql pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode jinja2-mode jdee memoize intero flycheck info+ indent-guide hy-mode dash-functional hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav edit-server edbi epc ctable concurrent deferred dumb-jump dockerfile-mode docker json-mode tablist magit-popup docker-tramp json-snatcher json-reformat diminish diff-hl define-word dactyl-mode cython-mode csv-mode confluence xml-rpc company-web web-completion-data company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-ansible company-anaconda company column-enforce-mode cmm-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider seq spinner queue pkg-info clojure-mode epl bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible anaconda-mode pythonic f dash s aggressive-indent adoc-mode markup-faces adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup))
  '(paradox-automatically-star t)
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(safe-local-variable-values
    '((eval progn
+           (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.terraform\\'"))
+     (lsp-yaml-schemas
+      (https://json\.schemastore\.org/chart\.json .
+                                                  ["**/Chart.yaml$"])
+      (https://json\.schemastore\.org/chart-lock\.json .
+                                                       ["**/Chart.lock$"])
+      (kubernetes .
+                  ["charts/*/templates/*.yaml"])
+      (https://raw\.githubusercontent\.com/microsoft/azure-pipelines-vscode/v1\.174\.2/service-schema\.json .
+                                                                                                            ["**/*pipeline*"]))
+     (eval progn
            (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.yarn-cache-1000\\'")
-           (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\cljs-out\\'"))
+           (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\cljs-out\\'")
+           (add-hook 'clj-refactor-mode-hook
+                     (lambda nil
+                       (dolist
+                           (ns
+                            '("^atallc.airdex-data.http-api.integrant.adsb-simulator" "^atallc.airdex-data.http-api.integrant.astm-relay" "^atallc.airdex-data.http-api.integrant.astm-aoi-subscription" "^atallc.airdex-data.http-api.integrant.db" "^atallc.airdex-data.http-api.integrant.efb" "^atallc.airdex-data.http-api.integrant.server" "^atallc.airdex-data.spec.core" "^int.atallc.airdex-data.http-api.aircraft-position.routes-test" "^int.atallc.airdex-data.http-api.core-test" "^int.atallc.airdex-data.http-api.efb-test" "^int.atallc.airdex-data.http-api.integrant.astm-relay-test" "^int.atallc.airdex-data.http-api.uss.routes-test"))
+                         (add-to-list 'cljr-libspec-whitelist ns)))))
      (cider-ns-refresh-after-fn . "integrant.repl/resume")
      (cider-ns-refresh-before-fn . "integrant.repl/suspend")
+     (eval add-to-list 'auto-mode-alist
+           '("Chart.lock$" . yaml-mode))
      (typescript-backend . tide)
      (typescript-backend . lsp)
      (javascript-backend . tide)
