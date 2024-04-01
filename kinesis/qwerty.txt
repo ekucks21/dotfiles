@@ -17,8 +17,8 @@
 [kpdiv]>[F9]
 [kpmult]>[F10]
 [kp-hyphen]>[F11]
-[caps]>[kpshift]
-[kp-caps]>[kpshift]
+[caps]>null
+[kp-caps]>null
 [kp-n]>[escape]
 [kp-h]>[left]
 [kp4]>[down]
@@ -46,8 +46,8 @@
 [kp-home]>[kp-lalt]
 [end]>[obrack]
 [kp-end]>[kp-obrack]
-[delete]>[tab]
-[kp-delete]>[kp-tab]
+[delete]>[kpshift]
+[kp-delete]>[kpshift]
 
 [up]>[down]
 [down]>[up]
