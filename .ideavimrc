@@ -79,6 +79,7 @@ map <C-O> :action Back<CR>
 map ,u :action Unwrap<CR>
 map g; :action JumpToLastChange<CR>
 map g, :action JumpToNextChange<CR>
+map ,te :action ChooseRunConfiguration<CR>
 
 nnoremap <tab> %
 vnoremap <silent> * :<C-U>
@@ -123,3 +124,6 @@ nnoremap <C-q> <C-v>
 " nnoremap ,W <C-w>
 nnoremap vir /;<CR>hv?=<CR>w
 " nnoremap yir /;<CR>mz?=<CR>wy`z
+
+set clipboard^=ideaput
+set clipboard+=unnamed
