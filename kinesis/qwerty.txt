@@ -17,6 +17,7 @@
 [kpdiv]>[F9]
 [kpmult]>[F10]
 [kp-hyphen]>[F11]
+[kp-rshift]>[F12]
 [caps]>null
 [kp-caps]>null
 [kp-n]>[escape]
