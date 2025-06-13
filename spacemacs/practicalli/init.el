@@ -863,12 +863,76 @@ before packages are loaded."
   (spacemacs/set-leader-keys-for-major-mode 'clojurescript-repl-mode "tL" 'cider-test-rerun-test)
 
   ;; lsp clojure refactors
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gg" 'lsp-find-definition)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gd" 'lsp-find-declaration)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gh" 'lsp-treemacs-call-hierarchy)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gi" 'lsp-find-implementation)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ge" 'lsp-treemacs-errors-list)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gr" 'xref-find-references)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "Gg" 'lsp-ui-peek-find-definitions)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "Gr" 'lsp-ui-peek-find-references)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "Gi" 'lsp-ui-peek-find-implementation)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "Gs" 'lsp-ui-peek-find-workspace-symbol)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "hh" 'lsp-describe-thing-at-point)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "hg" 'lsp-ui-doc-glance)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "bd" 'lsp-describe-session)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ram" 'lsp-clojure-add-missing-libspec)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ran" 'lsp-clojure-add-import-to-namespace)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rcn" 'lsp-clojure-clean-ns)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rel" 'lsp-clojure-expand-let)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ris" 'lsp-clojure-inline-symbol)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ril" 'lsp-clojure-introduce-let)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rml" 'lsp-clojure-move-to-let)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ref" 'lsp-clojure-extract-function)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rmf" 'lsp-clojure-move-form)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rtf" 'lsp-clojure-thread-first-all)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rttf" 'lsp-clojure-thread-first)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rttl" 'lsp-clojure-thread-last)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rtl" 'lsp-clojure-thread-last-all)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rua" 'lsp-clojure-unwind-all)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rut" 'lsp-clojure-unwind-thread)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rrs" 'lsp-rename)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rct" 'lsp-clojure-create-test)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rrm" 'lsp-clojure-resolve-macro-as)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "red" (lambda (def-name)
                                                                   (interactive "MDef name: ")
                                                                   (lsp-clojure--refactoring-call "extract-to-def" def-name)))
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rab" (lambda ()
+                                                                  (interactive)
+                                                                  (lsp-clojure--refactoring-call "drag-param-backward")))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rab" "drag param backward")
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "raf" (lambda ()
+                                                                  (interactive)
+                                                                  (lsp-clojure--refactoring-call "drag-param-forward")))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",raf" "drag param forward")
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rdb" (lambda ()
+                                                                  (interactive)
+                                                                  (lsp-clojure--refactoring-call "drag-backward")))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rdb" "drag backward")
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rdf" (lambda ()
+                                                                  (interactive)
+                                                                  (lsp-clojure--refactoring-call "drag-forward")))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rdf" "drag forward")
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rof" (lambda ()
+                                                                  (interactive)
+                                                                  (lsp-clojure--refactoring-call "demote-fn")))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rof" "demote function")
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rdk" (lambda ()
+                                                                  (interactive)
+                                                                  (lsp-clojure--refactoring-call "destructure-keys")))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rdk" "destructure keys")
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rfe" (lambda ()
+                                                                  (interactive)
+                                                                  (lsp-clojure--refactoring-call "create-function")))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rfe" "create function")
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rpf" (lambda (fn-name)
+                                                                  (interactive "MFn name: ")
+                                                                  (lsp-clojure--refactoring-call "promote-fn" fn-name)))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rpf" "promote function")
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rrr" (lambda ()
+                                                                  (interactive)
+                                                                  (lsp-clojure--refactoring-call "replace-refer-all-with-refer")))
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rrr" "replace refer all with refer")
 
   ;; lispy
   (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
@@ -893,13 +957,16 @@ before packages are loaded."
                                (setq lispy-visit-method "projectile")
                                (lispy-define-key lispy-mode-map-special "/" 'lispy-splice)
                                (lispy-define-key lispy-mode-map-special "i" 'indent-sexp)))
+
+  ;; (add-hook 'lispy-mode
+  ;;           (defhydra+ hydra-lispy-x ()
+  ;;             ("M" lsp-clojure-move-to-let "move to let")
+  ;;             ("E" cljr-expand-let "expand let")
+  ;;             ("n" lsp-rename "rename symbol")
+  ;;             ("f" cljr-inline-symbol "inline symbol")))
+
   (add-hook 'lsp-mode-hook (lambda ()
                              (require 'lsp-clojure)
-                             (defhydra+ hydra-lispy-x ()
-                               ("M" lsp-clojure-move-to-let "move to let")
-                               ("E" cljr-expand-let "expand let")
-                               ("n" lsp-rename "rename symbol")
-                               ("f" cljr-inline-symbol "inline symbol"))
                              (when (eq major-mode 'clojure-mode)
                                (setq-local lsp-enable-indentation nil))
                              (define-key lispy-mode-map (kbd "M-n") 'lispy-mark-symbol)
@@ -977,11 +1044,11 @@ before packages are loaded."
   (setq magit-repository-directories '("~/sb/"))
 
   ;; airdex
-  (use-package airdex
-    :ensure nil
-    :load-path "/home/kuckse/sb/ata-aviation/lisp/"
-    :custom
-    airdex-cider-always-jack-in-at-root t)
+  ;; (use-package airdex
+  ;;   :ensure nil
+  ;;   :load-path "/home/kuckse/sb/ata-aviation/lisp/"
+  ;;   :custom
+  ;;   airdex-cider-always-jack-in-at-root t)
 
   ;;term
   (setq comint-scroll-to-bottom-on-output "others")
@@ -1002,6 +1069,16 @@ before packages are loaded."
 
   (use-package powerline)
 
+  (use-package org
+    :config
+    (spacemacs/set-leader-keys-for-major-mode 'org-mode "sH" 'org-do-promote))
+
+  (use-package lsp
+    :init
+    (setq lsp-keymap-prefix ",")
+    :config
+    (define-key lsp-mode-map (kbd ",") lsp-command-map))
+
   (with-eval-after-load 'lsp-mode
     (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.devenv\\'"))
 
@@ -1014,7 +1091,8 @@ before packages are loaded."
     :custom
     (evil-cleverparens-use-s-and-S nil))
 
-  (evil-global-set-key 'normal "/" 'consult-line)
+  ;; (evil-global-set-key 'normal "/" 'consult-line)
+  ;; (evil-global-set-key 'normal "/" 'evil-search-forward)
   (evil-global-set-key 'normal "f" 'evil-avy-goto-char-in-line)
   (evil-global-set-key 'normal "s" 'evil-avy-goto-char-2)
   (evil-global-set-key 'motion "s" 'evil-avy-goto-char-2)
