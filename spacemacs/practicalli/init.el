@@ -49,7 +49,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t
                       auto-completion-idle-delay 0.0
-                      auto-completion-minimum-prefix-length 1
+                      auto-completion-minimum-prefix-length 30
                       ;; auto-completion-complete-with-key-sequence "fd"
                       )
 
@@ -236,7 +236,7 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       envrc
-                                      powerline
+                                      ;; powerline
                                       lispy
                                       (setenv-file :location (recipe :fetcher github :repo "cfclrk/setenv-file"))
                                       lispyville
@@ -422,6 +422,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-themes '(spacemacs-dark
                          doom-gruvbox
                          doom-gruvbox-light
+                         spacemacs-dark
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -444,11 +445,10 @@ It should only modify the values of Spacemacs settings."
    ;; Point size is recommended, because it's device independent. (default 10.0)
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("MesloLGS NF"
+   dotspacemacs-default-font '("Fira Code"
                                :size 11
                                :weight normal
-                               :width normal
-                               :powerline-scaleine-scale 1.1)
+                               :width normal)
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -765,11 +765,11 @@ dump."
 
 
 (defun dotspacemacs/user-config ()
-  "Configuration for user code:
-This function is called at the very end of Spacemacs startup, after layer
-configuration.
-Put your configuration code here, except for variables that should be set
-before packages are loaded."
+  ;;   "Configuration for user code:
+  ;; This function is called at the very end of Spacemacs startup, after layer
+  ;; configuration.
+  ;; Put your configuration code here, except for variables that should be set
+  ;; before packages are loaded."
 
   ;; dotspacemacs/user-config divided into files
   ;; - comment files to skip loading specific configuration
@@ -868,7 +868,7 @@ before packages are loaded."
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gh" 'lsp-treemacs-call-hierarchy)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gi" 'lsp-find-implementation)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ge" 'lsp-treemacs-errors-list)
-  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gr" 'xref-find-references)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "gr" 'lsp-find-references)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "Gg" 'lsp-ui-peek-find-definitions)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "Gr" 'lsp-ui-peek-find-references)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "Gi" 'lsp-ui-peek-find-implementation)
@@ -876,6 +876,7 @@ before packages are loaded."
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "hh" 'lsp-describe-thing-at-point)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "hg" 'lsp-ui-doc-glance)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "bd" 'lsp-describe-session)
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "br" 'lsp-restart-workspace)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ram" 'lsp-clojure-add-missing-libspec)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "ran" 'lsp-clojure-add-import-to-namespace)
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rcn" 'lsp-clojure-clean-ns)
@@ -897,6 +898,10 @@ before packages are loaded."
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "red" (lambda (def-name)
                                                                   (interactive "MDef name: ")
                                                                   (lsp-clojure--refactoring-call "extract-to-def" def-name)))
+  ;; (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rmf" (lambda ()
+  ;;                                                                 (interactive)
+  ;;                                                                 (lsp-clojure--refactoring-call "move-form")))
+  ;; (which-key-add-major-mode-key-based-replacements 'clojure-mode ",rmf" "move-form")
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "rab" (lambda ()
                                                                   (interactive)
                                                                   (lsp-clojure--refactoring-call "drag-param-backward")))
@@ -950,10 +955,10 @@ before packages are loaded."
                                  'lispy-kill)
                                (evil-define-key 'insert lispy-mode-map (kbd "C-d")
                                  'lispy-delete)
-                               (define-advice lispy-shifttab (:around (orig-func &rest args) fix)
-                                 ;; restore the `org-overview' behaviour back to 9.1.9
-                                 (let ((org-outline-regexp-bol (concat "^" outline-regexp)))
-                                   (apply orig-func args)))
+                               ;; (define-advice lispy-shifttab (:around (orig-func &rest args) fix)
+                               ;;   ;; restore the `org-overview' behaviour back to 9.1.9
+                               ;;   (let ((org-outline-regexp-bol (concat "^" outline-regexp)))
+                               ;;     (apply orig-func args)))
                                (setq lispy-visit-method "projectile")
                                (lispy-define-key lispy-mode-map-special "/" 'lispy-splice)
                                (lispy-define-key lispy-mode-map-special "i" 'indent-sexp)))
@@ -1033,6 +1038,7 @@ before packages are loaded."
   (use-package magit
     :config
     (progn
+      (setq magit-show-long-lines-warning nil)
       (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
       (transient-append-suffix 'magit-fetch "-t"
         '("-f" "Bypass safety checks" "--force"))))
@@ -1067,8 +1073,6 @@ before packages are loaded."
     (defadvice projectile-project-root (around ignore-remote first activate)
       (unless (file-remote-p default-directory) ad-do-it)))
 
-  (use-package powerline)
-
   (use-package org
     :config
     (spacemacs/set-leader-keys-for-major-mode 'org-mode "sH" 'org-do-promote))
@@ -1087,9 +1091,9 @@ before packages are loaded."
   (setq-default word-wrap t)
   (global-visual-line-mode t)
 
-  (use-package evil-cleverparens
-    :custom
-    (evil-cleverparens-use-s-and-S nil))
+  ;; (use-package evil-cleverparens
+  ;;   :custom
+  ;;   (evil-cleverparens-use-s-and-S nil))
 
   ;; (evil-global-set-key 'normal "/" 'consult-line)
   ;; (evil-global-set-key 'normal "/" 'evil-search-forward)

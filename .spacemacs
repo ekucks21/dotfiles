@@ -104,7 +104,7 @@ values."
           lsp-enable-symbol-highlighting t
 
           ;; Show lint error indicator in the mode line
-          lsp-modeline-diagnostics-enable t
+          ;; lsp-modeline-diagnostics-enable t
           ;; lsp-modeline-diagnostics-scope :workspace
 
           lsp-remap-xref-keybindings t
@@ -330,7 +330,7 @@ values."
    dotspacemacs-inactive-transparency 90
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
    dotspacemacs-mode-line-unicode-symbols t
-   dotspacemacs-mode-line-theme 'spacemacs
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
@@ -338,7 +338,6 @@ values."
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
-   dotspacemacs-mode-line-theme 'spacemacs
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one). (default 'all)
@@ -386,9 +385,9 @@ layers configuration. You are free to put any user code."
   ;; (spacemacs/set-leader-keys-for-major-mode 'lsp-mode "lr" 'lsp-find-references)
   (spacemacs/set-leader-keys "pA" 'helm-projectile-find-file-in-known-projects)
   (spacemacs|forall-clojure-modes m
-    (spacemacs/set-leader-keys-for-major-mode m "gg" 'cider-find-var)
-    (spacemacs/set-leader-keys-for-major-mode m "=i" 'indent-sexp)
-    (spacemacs/set-leader-keys-for-major-mode m "ram" 'lsp-clojure-add-missing-libspec))
+                                  (spacemacs/set-leader-keys-for-major-mode m "gg" 'cider-find-var)
+                                  (spacemacs/set-leader-keys-for-major-mode m "=i" 'indent-sexp)
+                                  (spacemacs/set-leader-keys-for-major-mode m "ram" 'lsp-clojure-add-missing-libspec))
   (load "~/.emacs.d/.cache/quelpa/build/setenv-file/setenv-file.el")
   (setq setenv-file-dir (expand-file-name "~/creds/"))
   (setenv "JAVA_HOME" "/usr/lib/jvm/java-8-oracle")
