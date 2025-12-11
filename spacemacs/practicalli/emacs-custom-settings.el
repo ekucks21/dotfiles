@@ -54,7 +54,29 @@
  '(paradox-github-token t)
  '(persp-reset-windows-on-nil-window-conf nil)
  '(safe-local-variable-values
-   '((lsp-json-schemas
+   '((cider-clojure-cli-global-options . -A:versions:dev:test)
+     (eval progn
+           (add-to-list 'lsp-file-watch-ignored-directories
+                        "[/\\\\]\\.yarn-cache-1000\\'")
+           (add-to-list 'lsp-file-watch-ignored-directories
+                        "[/\\\\]\\cljs-out\\'")
+           (add-hook 'clj-refactor-mode-hook
+                     (lambda nil
+                       (dolist
+                           (ns
+                            '("^airdex.airdex-data.http-api.integrant.adsb-simulator"
+                              "^airdex.airdex-data.http-api.integrant.astm-relay"
+                              "^airdex.airdex-data.http-api.integrant.astm-aoi-subscription"
+                              "^airdex.airdex-data.http-api.integrant.db"
+                              "^airdex.airdex-data.http-api.integrant.efb"
+                              "^airdex.airdex-data.http-api.integrant.server"
+                              "^int.airdex.airdex-data.http-api.aircraft-position.routes-test"
+                              "^int.airdex.airdex-data.http-api.core-test"
+                              "^int.airdex.airdex-data.http-api.efb-test"
+                              "^int.airdex.airdex-data.http-api.integrant.astm-relay-test"
+                              "^int.airdex.airdex-data.http-api.uss.routes-test"))
+                         (add-to-list 'cljr-libspec-whitelist ns)))))
+     (lsp-json-schemas
       . [(:fileMatch ["*.geojson"] :url
                      "https://geojson.org/schema/GeoJSON.json")
          (:fileMatch [".jsbeautifyrc"] :url
