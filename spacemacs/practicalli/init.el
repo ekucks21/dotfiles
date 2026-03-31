@@ -49,7 +49,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t
                       auto-completion-idle-delay 10
-                      auto-completion-minimum-prefix-length 1
+                      auto-completion-minimum-prefix-length 30
                       )
 
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
@@ -659,7 +659,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("rg" "ag" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -822,6 +822,7 @@ dump."
             (lambda ()
               (define-clojure-indent
                (prop/for-all '(1 ((:defn)) :form))
+               (for-all '(1 ((:defn)) :form))
                (chuck/checking '(2 ((:defn)) :form))
                (async 1)
                (mfn/providing 1)
@@ -851,6 +852,12 @@ dump."
                (describe 1)
                (beforeEach 1))))
 
+  (use-package cider
+    :config
+    (progn
+      (spacemacs/set-leader-keys-for-major-mode 'cider-repl-history-mode "i" 'cider-repl-history-insert-and-quit)
+      (spacemacs/set-leader-keys-for-major-mode 'cider-repl-history-mode "q" 'cider-repl-history-quit)))
+
   (add-hook 'cider-mode-hook
             (lambda ()
               (cider-load-file (expand-file-name "lispy-clojure.clj" lispy-site-directory))
@@ -867,6 +874,8 @@ dump."
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "gh" 'lsp-treemacs-call-hierarchy))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "gi" 'lsp-find-implementation))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "ge" 'lsp-treemacs-errors-list))
+  (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "gf" 'consult-lsp-file-symbols))
+  (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "gs" 'consult-lsp-symbols))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "gr" 'lsp-find-references))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "Gg" 'lsp-ui-peek-find-definitions))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "Gr" 'lsp-ui-peek-find-references))
@@ -877,6 +886,7 @@ dump."
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "bd" 'lsp-describe-session))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "br" 'lsp-workspace-restart))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "ram" 'lsp-clojure-add-missing-libspec))
+  (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "raa" 'lsp-execute-code-action))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "ran" 'lsp-clojure-add-import-to-namespace))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "rcn" 'lsp-clojure-clean-ns))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "rel" 'lsp-clojure-expand-let))
@@ -894,9 +904,11 @@ dump."
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "rrs" 'lsp-rename))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "rct" 'lsp-clojure-create-test))
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "rrm" 'lsp-clojure-resolve-macro-as))
+  (spacemacs/set-leader-keys-for-major-mode 'lsp-mode "gs" 'consult-lsp-symbols)
   (spacemacs|forall-clojure-modes m (spacemacs/set-leader-keys-for-major-mode m "red" (lambda (def-name)
                                                                                         (interactive "MDef name: ")
                                                                                         (lsp-clojure--refactoring-call "extract-to-def" def-name))))
+  (spacemacs|forall-clojure-modes m (which-key-add-major-mode-key-based-replacements m ",red" "extract to def"))
   ;; (spacemacs/set-leader-keys-for-major-modes 'clojure-mode "rmf" (lambda ()
   ;;                                                                 (interactive)
   ;;                                                                 (lsp-clojure--refactoring-call "move-form")))
@@ -1055,15 +1067,19 @@ dump."
     (progn
       (add-hook 'company-mode-hook
                 (lambda()
-                  (global-set-key (kbd "S-SPC") 'company-complete)))))
+                  (global-set-key (kbd "C-SPC") 'company-complete)))))
 
 
   ;; airdex
-  ;; (use-package airdex
-  ;;   :ensure nil
-  ;;   :load-path "/home/kuckse/sb/ata-aviation/lisp/"
-  ;;   :custom
-  ;;   airdex-cider-always-jack-in-at-root t)
+  (use-package airdex
+    :ensure nil
+    :load-path "/home/kuckse/sb/ata-aviation/lisp/"
+    :custom
+    airdex-cider-always-jack-in-at-root t)
+
+  (spacemacs/set-leader-keys-for-minor-mode 'airdex-mode "aas" 'airdex-clojure-system-start)
+  (spacemacs/set-leader-keys-for-minor-mode 'airdex-mode "aah" 'airdex-clojure-system-halt)
+  (spacemacs/set-leader-keys-for-minor-mode 'airdex-mode "aam" 'airdex-make)
 
   ;;term
   (setq comint-scroll-to-bottom-on-output "others")
@@ -1084,7 +1100,9 @@ dump."
 
   (use-package org
     :config
-    (spacemacs/set-leader-keys-for-major-mode 'org-mode "sH" 'org-do-promote))
+    (progn
+      (setq org-link-file-path-type "relative")
+      (spacemacs/set-leader-keys-for-major-mode 'org-mode "sH" 'org-do-promote)))
 
   (use-package lsp
     :init
