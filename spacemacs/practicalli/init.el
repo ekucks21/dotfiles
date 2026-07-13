@@ -55,15 +55,15 @@ This function should only modify configuration layer settings."
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
      (clojure :variables
               ;; clojure-backend 'cider                 ; use cider and disable lsp
-              clojure-enable-kaocha-runner t            ; enable Kaocha test runner
-              cider-repl-display-help-banner nil        ; disable help banner
-              cider-print-fn 'puget                     ; pretty printing with sorted keys / set values
+              clojure-enable-kaocha-runner t     ; enable Kaocha test runner
+              cider-repl-display-help-banner nil ; disable help banner
+              cider-print-fn 'puget ; pretty printing with sorted keys / set values
               clojure-indent-style 'align-arguments
               clojure-align-forms-automatically t
               clojure-toplevel-inside-comment-form t ; clashes with LSP
-              cider-result-overlay-position 'at-point   ; results shown right after expression
+              cider-result-overlay-position 'at-point ; results shown right after expression
               cider-overlays-use-font-lock t
-              cider-repl-buffer-size-limit 100          ; limit lines shown in REPL buffer
+              cider-repl-buffer-size-limit 100 ; limit lines shown in REPL buffer
               nrepl-use-ssh-fallback-for-remote-hosts t ; connect via ssh to remote hosts
               )
 
@@ -120,17 +120,17 @@ This function should only modify configuration layer settings."
      ;; https://practical.li/spacemacs/install-spacemacs/clojure-lsp/
      (lsp :variables
           lsp-file-watch-threshold 2000
-          lsp-headerline-breadcrumb-enable t              ; Breadcrumb trail
-          lsp-headerline-breadcrumb-segments '(symbols)   ; namespace & symbols, no file path
-          lsp-ui-peek-enable nil                          ; popups for refs, errors, symbols, etc.
-          lsp-semantic-tokens-enable t                    ; enhance syntax highlight
-          lsp-treemacs-error-list-current-project-only t  ; limit errors to current project
-          lsp-idle-delay 1.5                              ; smooth LSP features response
-          lsp-eldoc-enable-hover nil                      ; disable all hover actions
-          lsp-ui-doc-enable nil                           ; doc hover popups
-          lsp-ui-sideline-enable nil                      ; sidebar code actions visual indicator
-          treemacs-space-between-root-nodes nil           ; spacing in treemacs views
-          lsp-log-io t                                    ; Log client-server json communication
+          lsp-headerline-breadcrumb-enable t            ; Breadcrumb trail
+          lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+          lsp-ui-peek-enable nil        ; popups for refs, errors, symbols, etc.
+          lsp-semantic-tokens-enable t  ; enhance syntax highlight
+          lsp-treemacs-error-list-current-project-only t ; limit errors to current project
+          lsp-idle-delay 1.5            ; smooth LSP features response
+          lsp-eldoc-enable-hover nil    ; disable all hover actions
+          lsp-ui-doc-enable nil         ; doc hover popups
+          lsp-ui-sideline-enable nil    ; sidebar code actions visual indicator
+          treemacs-space-between-root-nodes nil ; spacing in treemacs views
+          lsp-log-io t                  ; Log client-server json communication
           )
 
      markdown
@@ -142,6 +142,8 @@ This function should only modify configuration layer settings."
      ;; Spacemacs Org mode
      (org :variables
           org-enable-github-support t
+          org-enable-jira-support t
+          jiralib-url "https://ataaviation.atlassian.net"
           org-enable-bootstrap-support t
           ;; org-enable-reveal-js-support t
           org-want-todo-bindings t
@@ -179,15 +181,15 @@ This function should only modify configuration layer settings."
      ;; Configuration: https://github.com/seagle0128/doom-modeline#customize
      (spacemacs-modeline :variables
                          doom-modeline-height 12
-                         doom-modeline-bar-width 0                  ; size of bar icon at start of modeline
-                         doom-modeline-buffer-state-icon t          ; disk icon for unsaved changes (default)
-                         doom-modeline-major-mode-color-icon t      ; color icon of major mode
+                         doom-modeline-bar-width 0 ; size of bar icon at start of modeline
+                         doom-modeline-buffer-state-icon t ; disk icon for unsaved changes (default)
+                         doom-modeline-major-mode-color-icon t ; color icon of major mode
                          doom-modeline-buffer-file-name-style 'relative-to-project
                          doom-modeline-display-default-persp-name t ; layout name
-                         doom-modeline-minor-modes nil              ; show minor modes
-                         doom-modeline-modal nil                    ; show Evil state icon/text
+                         doom-modeline-minor-modes nil ; show minor modes
+                         doom-modeline-modal nil ; show Evil state icon/text
                          ;; doom-modeline-modal-icon t              ; icon when t, ascii when nil
-                         doom-modeline-buffer-encoding nil          ; remove UTF-8, etc.
+                         doom-modeline-buffer-encoding nil ; remove UTF-8, etc.
                          )
 
      ;; Spell as you type with Flyspell package,
@@ -418,11 +420,11 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(spacemacs-light
+                         spacemacs-dark
                          doom-gruvbox
                          doom-gruvbox-light
-                         spacemacs-dark
-                         spacemacs-light)
+                         spacemacs-dark)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -800,6 +802,8 @@ dump."
 
   ;; My stuff
 
+  (server-start)
+
   ;; dired
   (use-package dired
     :custom
@@ -824,6 +828,9 @@ dump."
                (prop/for-all '(1 ((:defn)) :form))
                (for-all '(1 ((:defn)) :form))
                (chuck/checking '(2 ((:defn)) :form))
+               (checking '(2 ((:defn)) :form))
+               (checking+ '(2 ((:defn)) :form))
+               (tc/quick-check '(2 ((:defn)) :form))
                (async 1)
                (mfn/providing 1)
                (mfn/verifying 1)
@@ -851,6 +858,50 @@ dump."
                (context 2)
                (describe 1)
                (beforeEach 1))))
+
+  (defun my/clojure-align (beg end)
+    "Like `clojure-align' but reindents the full BEG/END region after each alignment."
+    (interactive (if (use-region-p)
+                     (list (region-beginning) (region-end))
+                   (save-excursion
+                     (let ((end (progn (end-of-defun) (point))))
+                       (clojure-backward-logical-sexp)
+                       (list (point) end)))))
+    (setq end (copy-marker end))
+    (save-excursion
+      (goto-char beg)
+      (while (clojure--find-sexp-to-align end)
+        (let ((sexp-end (save-excursion
+                          (backward-up-list)
+                          (forward-sexp 1)
+                          (point-marker)))
+              (clojure-align-forms-automatically nil)
+              (count 1))
+          (save-excursion
+            (while (search-forward-regexp "^ *\n" sexp-end 'noerror)
+              (cl-incf count)))
+          (indent-region (point) (marker-position sexp-end))
+          (dotimes (_ count)
+            (align-region (point) sexp-end nil
+                          `((clojure-align
+                             (regexp . clojure--search-whitespace-after-next-sexp)
+                             (group . 1)
+                             (separate . ,clojure-align-separator)
+                             (repeat . t)))
+                          nil))
+          ;; After aligning, reindent the full top-level region to
+          ;; restore any outer forms disturbed by the alignment pass.
+          (indent-region beg (marker-position end))))))
+
+  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "=l" 'my/clojure-align)
+
+  (use-package clojure-mode
+    :config
+    (progn
+      (advice-add 'clojure-align :after
+                  (lambda (beg end)
+                    (indent-region beg (marker-position end)))
+                  '((name . clojure-align-full-reindent)))))
 
   (use-package cider
     :config
