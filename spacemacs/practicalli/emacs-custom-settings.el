@@ -7,51 +7,59 @@
  '(dired-listing-switches "-alh")
  '(helm-external-programs-associations '(("pdf" . "brave-browser")))
  '(package-selected-packages
-   '(ace-link aggressive-indent all-the-icons auto-compile auto-highlight-symbol
-              auto-yasnippet browse-at-remote centered-cursor-mode
-              cider-eval-sexp-fu clean-aindent-mode clojure-essential-ref
-              clojure-snippets code-review color-identifiers-mode
-              column-enforce-mode command-log-mode company-emoji
-              company-quickhelp company-statistics company-web
-              compleseus-spacemacs-help consult-lsp consult-yasnippet csv-mode
-              define-word devdocs diff-hl diminish dired-quick-sort
-              disable-mouse docker dockerfile-mode doom-modeline doom-themes
-              dotenv-mode drag-stuff dumb-jump eat edit-indirect elisp-def
-              elisp-demos elisp-slime-nav embark-consult emmet-mode
-              emoji-cheat-sheet-plus emr envrc esh-help eshell-prompt-extras
-              eshell-z evil-anzu evil-args evil-cleverparens evil-collection
-              evil-easymotion evil-escape evil-evilified-state evil-exchange
-              evil-goggles evil-iedit-state evil-indent-plus evil-lion
-              evil-lisp-state evil-matchit evil-mc evil-nerd-commenter
-              evil-numbers evil-org evil-surround evil-textobj-line evil-tutor
-              evil-unimpaired evil-visual-mark-mode evil-visualstar
-              expand-region eyebrowse fancy-battery flycheck-elsa
-              flycheck-package flycheck-pos-tip flyspell-correct-popup gh-md
-              git-link git-messenger git-modes git-timemachine
-              gitignore-templates gnuplot golden-ratio google-translate
-              graphviz-dot-mode helm-make hide-comnt highlight-indentation
-              highlight-numbers highlight-parentheses holy-mode hungry-delete
-              hybrid-mode impatient-mode indent-guide info+ inspector js-doc
-              js2-refactor json-mode json-navigator json-reformat kaocha-runner
-              keycast ligature link-hint lispyville livid-mode lorem-ipsum
-              lsp-origami lsp-treemacs lsp-ui macrostep magit-todos marginalia
-              markdown-toc multi-line multi-term multi-vterm nameless
-              nodejs-repl npm-mode open-junk-file orderless org-cliplink
-              org-contrib org-download org-jira org-journal org-mime
-              org-pomodoro org-present org-projectile org-rich-yank
-              org-superstar orgit-forge overseer ox-gfm ox-jira ox-twbs
-              page-break-lines paradox password-generator persistent-scratch
-              popwin prettier-js pug-mode quickrun rainbow-delimiters
-              rainbow-identifiers rainbow-mode ranger request restart-emacs
-              sass-mode scss-mode setenv-file shell-pop slim-mode smeargle
-              space-doc spacemacs-purpose-popwin spacemacs-whitespace-cleanup
-              string-edit-at-point string-inflection symbol-overlay symon
-              tagedit term-cursor terminal-here toc-org treemacs-evil
-              treemacs-icons-dired treemacs-magit treemacs-persp
-              treemacs-projectile undo-fu-session unicode-fonts
-              unkillable-scratch vertico vi-tilde-fringe volatile-highlights
-              vundo web-beautify web-mode wgrep window-purpose winum
-              writeroom-mode ws-butler yaml-mode yasnippet-snippets))
+   '(a ace-link ace-window aggressive-indent aio alert all-the-icons anzu async
+       auto-compile auto-highlight-symbol auto-yasnippet avy bind-map
+       browse-at-remote centered-cursor-mode cfrs cider cider-eval-sexp-fu
+       clang-format clean-aindent-mode clojure-essential-ref clojure-mode
+       clojure-snippets closql code-review color-identifiers-mode
+       column-enforce-mode command-log-mode company company-emoji
+       company-quickhelp company-statistics company-web
+       compleseus-spacemacs-help cond-let consult consult-lsp consult-yasnippet
+       csv-mode dash deferred define-word devdocs diff-hl diminish
+       dired-quick-sort disable-mouse docker dockerfile-mode doom-modeline
+       doom-themes dotenv-mode drag-stuff dumb-jump eat edit-indirect elisp-def
+       elisp-demos elisp-slime-nav emacsql embark embark-consult emmet-mode
+       emoji-cheat-sheet-plus emojify emr envrc epl esh-help
+       eshell-prompt-extras eshell-z eval-sexp-fu evil evil-anzu evil-args
+       evil-cleverparens evil-collection evil-easymotion evil-escape
+       evil-evilified-state evil-exchange evil-goggles evil-iedit-state
+       evil-indent-plus evil-lion evil-lisp-state evil-matchit evil-mc
+       evil-nerd-commenter evil-numbers evil-org evil-surround evil-textobj-line
+       evil-tutor evil-unimpaired evil-visual-mark-mode evil-visualstar
+       expand-region eyebrowse f fancy-battery flycheck flycheck-elsa
+       flycheck-package flycheck-pos-tip flyspell-correct flyspell-correct-popup
+       font-utils forge gh-md ghub git-link git-messenger git-modes
+       git-timemachine gitignore-templates gntp gnuplot golden-ratio
+       google-translate goto-chg graphviz-dot-mode haml-mode helm helm-core
+       helm-make hide-comnt highlight-indentation highlight-numbers
+       highlight-parentheses hl-todo holy-mode ht htmlize hungry-delete
+       hybrid-mode hydra iedit imenu-list impatient-mode indent-guide info+
+       inheritenv inspector js-doc js2-mode js2-refactor json-mode
+       json-navigator json-reformat json-snatcher kaocha-runner keycast ligature
+       link-hint lispy lispyville list-utils livid-mode llama log4e lorem-ipsum
+       lsp-mode lsp-origami lsp-treemacs lsp-ui lv macrostep magit magit-section
+       magit-todos marginalia markdown-mode markdown-toc multi-line multi-term
+       multi-vterm multiple-cursors nameless nerd-icons nodejs-repl npm-mode
+       open-junk-file orderless org org-category-capture org-cliplink
+       org-contrib org-download org-jira org-journal org-mime org-pomodoro
+       org-present org-project-capture org-projectile org-rich-yank
+       org-superstar orgit orgit-forge origami overseer ox-gfm ox-jira ox-twbs
+       package-lint page-break-lines paradox paredit parent-mode parseclj
+       parseedn password-generator pcache pcre2el persistent-scratch
+       persistent-soft persp-mode pfuture pkg-info popup popwin pos-tip posframe
+       prettier-js projectile pug-mode queue quickrun rainbow-delimiters
+       rainbow-identifiers rainbow-mode ranger request restart-emacs s sass-mode
+       scss-mode sesman setenv-file shell-pop shift-number shrink-path shut-up
+       simple-httpd skewer-mode slim-mode smartparens smeargle space-doc
+       spacemacs-purpose-popwin spacemacs-whitespace-cleanup spinner
+       string-edit-at-point string-inflection symbol-overlay symon tablist
+       tagedit term-cursor terminal-here toc-org transient treemacs
+       treemacs-evil treemacs-icons-dired treemacs-magit treemacs-persp
+       treemacs-projectile treepy ucs-utils undo-fu-session unicode-fonts
+       unkillable-scratch uuidgen vertico vi-tilde-fringe visual-fill-column
+       volatile-highlights vterm vundo web-beautify web-completion-data web-mode
+       wfnames wgrep window-purpose winum with-editor writeroom-mode ws-butler
+       yaml yaml-mode yasnippet yasnippet-snippets))
  '(paradox-github-token t)
  '(persp-reset-windows-on-nil-window-conf nil)
  '(safe-local-variable-values

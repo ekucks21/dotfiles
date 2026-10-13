@@ -240,6 +240,7 @@ This function should only modify configuration layer settings."
                                       ;; powerline
                                       lispy
                                       (setenv-file :location (recipe :fetcher github :repo "cfclrk/setenv-file"))
+                                      zoutline
                                       lispyville
                                       clojure-essential-ref
                                       (evil-surround
@@ -859,55 +860,11 @@ dump."
                (describe 1)
                (beforeEach 1))))
 
-  (defun my/clojure-align (beg end)
-    "Like `clojure-align' but reindents the full BEG/END region after each alignment."
-    (interactive (if (use-region-p)
-                     (list (region-beginning) (region-end))
-                   (save-excursion
-                     (let ((end (progn (end-of-defun) (point))))
-                       (clojure-backward-logical-sexp)
-                       (list (point) end)))))
-    (setq end (copy-marker end))
-    (save-excursion
-      (goto-char beg)
-      (while (clojure--find-sexp-to-align end)
-        (let ((sexp-end (save-excursion
-                          (backward-up-list)
-                          (forward-sexp 1)
-                          (point-marker)))
-              (clojure-align-forms-automatically nil)
-              (count 1))
-          (save-excursion
-            (while (search-forward-regexp "^ *\n" sexp-end 'noerror)
-              (cl-incf count)))
-          (indent-region (point) (marker-position sexp-end))
-          (dotimes (_ count)
-            (align-region (point) sexp-end nil
-                          `((clojure-align
-                             (regexp . clojure--search-whitespace-after-next-sexp)
-                             (group . 1)
-                             (separate . ,clojure-align-separator)
-                             (repeat . t)))
-                          nil))
-          ;; After aligning, reindent the full top-level region to
-          ;; restore any outer forms disturbed by the alignment pass.
-          (indent-region beg (marker-position end))))))
-
-  (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "=l" 'my/clojure-align)
-
-  (use-package clojure-mode
-    :config
-    (progn
-      (advice-add 'clojure-align :after
-                  (lambda (beg end)
-                    (indent-region beg (marker-position end)))
-                  '((name . clojure-align-full-reindent)))))
-
   (use-package cider
     :config
     (progn
-      (spacemacs/set-leader-keys-for-major-mode 'cider-repl-history-mode "i" 'cider-repl-history-insert-and-quit)
-      (spacemacs/set-leader-keys-for-major-mode 'cider-repl-history-mode "q" 'cider-repl-history-quit)))
+      (spacemacs/set-leader-keys-for-major-mode 'cider-history-mode "i" 'cider-history-insert-and-quit)
+      (spacemacs/set-leader-keys-for-major-mode 'cider-history-mode "q" 'cider-history-quit)))
 
   (add-hook 'cider-mode-hook
             (lambda ()
