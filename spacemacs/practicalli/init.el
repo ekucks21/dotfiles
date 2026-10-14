@@ -872,6 +872,17 @@ dump."
               (cider-add-to-alist 'cider-jack-in-dependencies
                                   "clj-commons/pomegranate" "1.2.1")))
 
+  ;; dotspacemacs/user-config
+  ;; --- CIDER 2.0 history browser vs. Spacemacs clojure layer ---
+  ;; Remove once Spacemacs or CIDER handles the cider-repl-history -> cider-history rename.
+  (evil-set-initial-state 'cider-history-mode 'evilified)
+
+  (with-eval-after-load 'cider-history
+    (unless (fboundp 'cider-repl-history-forward)  (defalias 'cider-repl-history-forward  #'cider-history-forward))
+    (unless (fboundp 'cider-repl-history-previous) (defalias 'cider-repl-history-previous #'cider-history-previous))
+    (unless (fboundp 'cider-repl-history-update)   (defalias 'cider-repl-history-update   #'cider-history-update))
+    (unless (fboundp 'cider-repl-history-occur)    (defalias 'cider-repl-history-occur    #'cider-history-occur)))
+
   (spacemacs/set-leader-keys-for-major-mode 'clojure-mode "tL" 'cider-test-rerun-test)
   (spacemacs/set-leader-keys-for-major-mode 'cider-repl-mode "tL" 'cider-test-rerun-test)
   (spacemacs/set-leader-keys-for-major-mode 'clojurescript-repl-mode "tL" 'cider-test-rerun-test)
@@ -972,6 +983,7 @@ dump."
                                  'special-lispy-splice)
                                (evil-define-key 'insert lispy-mode-map (kbd "C-k")
                                  'lispy-kill)
+                               (evil-define-key 'insert lispy-mode-map (kbd "C-M-m") 'lispy-mark-symbol)
                                (evil-define-key 'insert lispy-mode-map (kbd "C-d")
                                  'lispy-delete)
                                ;; (define-advice lispy-shifttab (:around (orig-func &rest args) fix)
@@ -993,7 +1005,7 @@ dump."
                              (require 'lsp-clojure)
                              (when (eq major-mode 'clojure-mode)
                                (setq-local lsp-enable-indentation nil))
-                             (define-key lispy-mode-map (kbd "M-n") 'lispy-mark-symbol)
+                             (define-key lispy-mode-map (kbd "C-M-,") 'lispy-mark-symbol)
                              (define-key lispy-mode-map (kbd "M-.")
                                          (lambda ()
                                            (interactive)
